@@ -1,7 +1,7 @@
 import fastify, { FastifyRequest } from "fastify"
 import { config } from "dotenv"
 import { green } from "chalk"
-import { PrismaClient as DBMain } from "db-main"
+import { PrismaClient as DBMain } from "@dartster/db-main"
 
 config()
 
@@ -19,14 +19,6 @@ export async function startServer() {
   server.get("/api/users", async (_request, reply) => {
     const users = await client.user.findMany()
     reply.send(users)
-  })
-
-  server.get("/api/users/:id", async (req: FastifyRequest<{ Params: { id: string } }>, reply) => {
-    const id = parseInt(req.params.id)
-    const user = await client.user.findUnique({
-      where: { id },
-    })
-    reply.send(user)
   })
 
   try {

@@ -1,0 +1,11 @@
+{
+  "name": "@agros/db",
+  "version": "0.0.1",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "dev": "docker-compose --env-file .env.docker up --force-recreate --build -d",
+    "stop": "docker-compose --env-file .env.docker stop",
+    "clean": "docker-compose --env-file .env.docker down --remove-orphans --volumes --rmi all"
+  }
+}

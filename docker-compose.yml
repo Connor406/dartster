@@ -3,10 +3,12 @@ services:
   # PostgreSQL database
   db:
     container_name: db
-    build: ./db
+    build: ./apps/backend/_db
     restart: always
     environment:
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: "${PG_DB}"
+      POSTGRES_USER: "${PG_USER}"
+      POSTGRES_PASSWORD: "${PG_PASSWORD}"
     ports:
       - 5432:5432
     volumes:
@@ -20,11 +22,13 @@ services:
       dockerfile: ./apps/backend/api/Dockerfile
     restart: always
     ports:
-      - 3000:3000
+      - 3007:3007
     volumes:
       - /node_modules
       - /libs/backend/db-main/node_modules
       - /apps/backend/api/node_modules
+    depends_on:
+      - db
 
 # Persist database between container versions
 volumes:

@@ -10,7 +10,7 @@
     "libs/shared/*"
   ],
   "scripts": {
-    "dartster:go": "turbo run dev --parallel",
+    "dartster:go": "turbo run dev",
     "build": "turbo run build",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",

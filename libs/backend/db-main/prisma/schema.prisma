@@ -1,11 +1,58 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-generator client {
-  provider = "prisma-client-js"
-}
-
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch"]
+}
+
+model user {
+  id         String      @id @default(uuid()) @db.Uuid
+  username   String      @unique
+  email      String      @unique
+  verified   Boolean     @default(false)
+  firstName  String
+  lastName   String
+  password   String
+  createdAt  DateTime
+  updatedAt  DateTime    @updatedAt
+  user_stats user_stats?
+  game       game?       @relation(fields: [gameId], references: [id])
+  gameId     String?
+  score      Int?        @default(0)
+  position   Int         @default(0)
+}
+
+model user_stats {
+  id      String @id @default(uuid()) @db.Uuid
+  user    user   @relation(fields: [user_id], references: [id])
+  user_id String @unique @db.Uuid
+  wins    Int    @default(0)
+  losses  Int    @default(0)
+  points  Int    @default(0)
+}
+
+model game {
+  id           String   @id @default(uuid())
+  winnerId     String?
+  activePlayer String?
+  started      Boolean  @default(false)
+  captain      String
+  playerOrder  String[]
+  user         user[]
+}
+
+model Session {
+  sessionToken String   @id
+  userId       String
+  valid        Boolean
+  userAgent    String
+  ip           String
+  createdAt    DateTime
+  updatedAt    DateTime @updatedAt
 }

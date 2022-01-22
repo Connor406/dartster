@@ -1,5 +1,5 @@
 {
-  "extends": "tsconfig/base.json",
+  "extends": "@dartster/tsconfig/base.json",
   "display": "api",
   "compilerOptions": {
     "rootDir": "src",

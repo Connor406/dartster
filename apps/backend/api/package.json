@@ -3,14 +3,14 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "nodemon",
+    "nodemon": "nodemon",
     "build": "tsc",
     "start": "node ./dist"
   },
   "dependencies": {
     "dotenv": "^10.0.0",
     "fastify": "^3.22.0",
-    "db-main": "*"
+    "@dartster/db-main": "*"
   },
   "devDependencies": {
     "@types/node": "^16.11.1",
