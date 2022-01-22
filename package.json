@@ -1,16 +1,24 @@
 {
-  "name": "turborepo-basic-shared",
+  "name": "dartster",
   "version": "0.0.0",
   "private": true,
   "workspaces": [
-    "apps/*",
-    "packages/*"
+    "apps/backend/*",
+    "apps/frontend/*",
+    "libs/backend/*",
+    "libs/frontend/*",
+    "libs/shared/*"
   ],
   "scripts": {
+    "dartster:go": "turbo run dev --parallel",
     "build": "turbo run build",
-    "dev": "turbo run dev --parallel",
     "lint": "turbo run lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "db:start": "docker-compose up -d --build db",
+    "db:stop": "docker-compose stop db",
+    "docker:start": "docker-compose up -d --build",
+    "docker:stop": "docker-compose down all",
+    "prisma": "yarn workspace db-main prisma"
   },
   "devDependencies": {
     "prettier": "^2.5.1",
