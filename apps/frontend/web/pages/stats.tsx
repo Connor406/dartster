@@ -1,7 +1,7 @@
-import axios from "../services"
+import axios from "@/services"
 import { useEffect, useState } from "react"
 import { useAtom } from "jotai"
-import { userAtom } from "../store"
+import { userAtom } from "@/store"
 
 export default function Stats() {
   const [stats, setStats] = useState()

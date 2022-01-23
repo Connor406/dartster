@@ -1,6 +1,6 @@
 import styled from "styled-components"
 import { motion } from "framer-motion"
-import { MountainSvg } from "../components/Motion"
+import { MountainSvg } from "@/components/Motion"
 
 const layer1 = {
   hidden: {

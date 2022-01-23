@@ -1,13 +1,14 @@
-import axios, { API_URL } from "../../services"
+import axios, { API_URL } from "@/services"
 import Axios from "axios"
-import { useAtom } from "jotai"
-import { useEffect, useState } from "react"
+import https from "https"
 import styled from "styled-components"
-import Player from "../../components/Motion/Draggable"
-import { Button, Form, Input } from "../../components/styled"
-import Wrapper from "../../components/Wrapper"
-import { userAtom } from "../../store"
-import { usePositionReorder } from "../../util/usePositionReorder"
+import Player from "@/components/Motion/Draggable"
+import Wrapper from "@/components/Wrapper"
+import { useEffect, useState } from "react"
+import { useAtom } from "jotai"
+import { userAtom } from "@/store"
+import { Button, Form, Input } from "@/components/styled"
+import { usePositionReorder } from "@/util/usePositionReorder"
 
 interface Props {
   users: any[]
@@ -164,7 +165,10 @@ export default function Game({ users, query }: Props) {
 
 export async function getServerSideProps(context) {
   const { query } = context
-  const res: any = await Axios.get(`${API_URL}/game?id=${query.gameId}`)
+  const httpsAgent = new https.Agent({
+    rejectUnauthorized: process.env.NEXT_PUBLIC_DART_ENV === "local" ? false : true,
+  })
+  const res: any = await Axios.get(`${API_URL}/game?id=${query.gameId}`, { httpsAgent })
   return { props: { users: res.data.users, query } }
 }
 

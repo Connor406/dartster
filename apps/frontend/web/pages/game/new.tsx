@@ -1,12 +1,12 @@
-import axios, { API_URL } from "../../services"
+import axios, { API_URL } from "@/services"
 import { useState, useEffect } from "react"
 import { useAtom } from "jotai"
-import { userAtom } from "../../store"
+import { userAtom } from "@/store"
 import { useForm } from "react-hook-form"
 import styled from "styled-components"
-import { Button, Form, Input } from "../../components/styled"
-import Wrapper from "../../components/Wrapper"
-import PlayerCards from "../../components/Motion/PlayerCard"
+import { Button, Form, Input } from "@/components/styled"
+import Wrapper from "@/components/Wrapper"
+import PlayerCards from "@/components/Motion/PlayerCard"
 import { useRouter } from "next/router"
 
 export default function NewGame() {

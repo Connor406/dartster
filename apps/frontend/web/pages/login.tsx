@@ -1,6 +1,6 @@
 import { useState } from "react"
-import axios, { API_URL } from "../services"
-import * as Style from "../components/styled"
+import axios, { API_URL } from "@/services"
+import * as Style from "@/components/styled"
 import { useForm, SubmitHandler } from "react-hook-form"
 import { useRouter } from "next/router"
 
