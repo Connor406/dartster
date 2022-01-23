@@ -18,7 +18,7 @@ const layer1 = {
   },
   visible: {
     pathLength: 1,
-    backgroundImage: `linear-gradient(217deg, ${colors.green}, ${colors.lightGreen} 100%)`,
+    backgroundImage: `linear-gradient(to left, ${colors.lightGreen}, ${colors.darkGreen} 120%)`,
     opacity: 1,
   },
 }
@@ -45,40 +45,24 @@ export function Index() {
         animate={{ x: 0, scale: 1 }}
         transition={{ duration: 0.5, type: "spring" }}
         color="white"
-        fontSize="10rem"
+        fontSize="11rem"
         fontFamily="Lansdowne Slanted"
+        textShadow="8px 8px 10px #164A41"
       >
         Dartster
       </MotionText>
+      <Box
+        w="50vw"
+        h="calc(100vh - 8rem)"
+        borderTopLeftRadius="40vw"
+        boxShadow="2xl"
+        bg="lightGreen"
+        pos="absolute"
+        right="0px"
+        top="8rem"
+      />
     </MotionBox>
   )
 }
 
 export default Index
-
-//
-
-{
-  /* <MountainSvg />
-      <TitleBox>
-        <Title
-          animate={{
-            x: 0,
-            scale: 1,
-            opacity: 1,
-            transition: {
-              duration: 0.6,
-              type: "spring",
-              delay: 1,
-            },
-          }}
-          initial={{
-            opacity: 0,
-            x: 300,
-            scale: 40,
-          }}
-        >
-          app name here
-        </Title>
-      </TitleBox> */
-}

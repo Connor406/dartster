@@ -35,7 +35,6 @@ const NavBar: React.FC = () => {
     <Box
       h="4rem"
       bgGradient={page === "/" ? "inherit" : `linear-gradient(140deg, green, lightGreen )`}
-      color="black"
       pos="fixed"
       display="flex"
       w="100vw"
@@ -85,7 +84,6 @@ const NavBar: React.FC = () => {
             flexDir="row"
             w="60vw"
             h="100%"
-            color="white"
           >
             <NavLink href="/login">SignIn</NavLink>
             <NavLink href="/register">SignUp</NavLink>
