@@ -1,13 +1,14 @@
-import axios, { API_URL } from "../services"
-import { useRouter } from "next/router"
+import axios, { API_URL } from "@/services"
 import { useEffect } from "react"
 import { useAtom } from "jotai"
-import { userAtom } from "../store"
-import styled from "styled-components"
-import { Box } from "@chakra-ui/layout"
-import { Link } from "@chakra-ui/react"
+import { userAtom } from "@/store"
+import { Box, LinkProps } from "@chakra-ui/layout"
+import { ComponentWithAs, Link } from "@chakra-ui/react"
+import { useRouter } from "next/router"
 
 const NavBar: React.FC = () => {
+  const router = useRouter()
+  const page = router.pathname
   const [user, setUser] = useAtom(userAtom)
 
   async function meQuery() {
@@ -32,14 +33,15 @@ const NavBar: React.FC = () => {
 
   return (
     <Box
-      bg="green"
+      h="4rem"
+      bgGradient={page === "/" ? "inherit" : `linear-gradient(140deg, green, lightGreen )`}
       color="black"
       pos="fixed"
       display="flex"
       w="100vw"
       left="0px"
       top="0px"
-      alignItems="center"
+      alignItems="flex-start"
       zIndex="112"
     >
       <Box
@@ -48,62 +50,66 @@ const NavBar: React.FC = () => {
         flexDir="row"
         w="60vw"
         justifyContent="flex-start"
-        bg="red"
+        color="white"
       >
-        <Link href="/">Home</Link>
-        <Link href="/game/new">New Game</Link>
-        <Link href="/stats"> Stats</Link>
-        {user.gameId && <Link href={`/game/${user.game.id}?user=${user.id}`}>Join Game</Link>}
+        <NavLink mx="1rem" href="/">
+          Home
+        </NavLink>
+        <NavLink href="/game/new">New Game</NavLink>
+        <NavLink href="/stats">Stats</NavLink>
+        {user.gameId && <NavLink href={`/game/${user.game.id}?user=${user.id}`}>Join Game</NavLink>}
       </Box>
-      <UserInfo>
+      <Box
+        display="flex"
+        justifyContent="flex-end"
+        listStyleType="none"
+        flexDir="row"
+        w="60vw"
+        h="100%"
+        color="white"
+      >
         {user.username ? (
-          <div>
-            <User href="">
+          <Box h="100%" display="flex" alignItems="flex-start">
+            <NavLink href="/">
               {user.username} 🎖{user.user_stats.points}
-            </User>
-            <User href="" onClick={e => logout(e)}>
+            </NavLink>
+            <NavLink href="/" onClick={e => logout(e)}>
               Logout
-            </User>
-          </div>
+            </NavLink>
+          </Box>
         ) : (
-          <div>
-            <User href="/login">SignIn</User>
-            <User href="/register">SignUp</User>
-          </div>
+          <Box
+            display="flex"
+            justifyContent="flex-end"
+            listStyleType="none"
+            flexDir="row"
+            w="60vw"
+            h="100%"
+            color="white"
+          >
+            <NavLink href="/login">SignIn</NavLink>
+            <NavLink href="/register">SignUp</NavLink>
+          </Box>
         )}
-      </UserInfo>
+      </Box>
     </Box>
   )
 }
 
 export default NavBar
 
-// const Link = styled.a`
-//   margin: 1rem;
-//   padding: 0px;
-//   text-decoration: none;
-//   transition: 0.2s ease-in-out;
-//   :visited {
-//     color: green;
-//   }
-//   :hover {
-//     transform: scale(1.1);
-//   }
-// `
-const UserInfo = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  margin-left: auto;
-`
-
-const User = styled.a`
-  margin-right: 30px;
-  text-decoration: none;
-  transition: 0.1s ease-in-out;
-  :visited {
-    color: inherit;
-  }
-  :hover {
-    transform: scale(1.2);
-  }
-`
+const NavLink = (props: LinkProps) => (
+  <Link
+    pt="1rem"
+    mr="1rem"
+    borderTop="5px solid transparent"
+    {...props}
+    _hover={{
+      color: "yellow",
+      borderTop: "5px solid #F1B24A",
+    }}
+    _visited={{
+      color: "inherit",
+    }}
+  />
+)

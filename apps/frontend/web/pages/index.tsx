@@ -1,32 +1,65 @@
-import styled from "styled-components"
 import { motion } from "framer-motion"
-import { MountainSvg } from "@/components/Motion"
+import { Box, Text } from "@chakra-ui/react"
+
+const colors = {
+  green: "rgba(77, 119, 78, 1)",
+  darkGreen: "rgba(22, 74, 65, 1)",
+  lightGreen: "rgba(157, 200, 141, 1)",
+  yellow: "rgba(241, 178, 74, 1)",
+  black: "rgba(18, 21, 31, 1)",
+  white: "rgba(255, 255, 255, 1)",
+}
 
 const layer1 = {
   hidden: {
     pathLength: 0,
-    backgroundImage: "linear-gradient(rgb(5, 228, 244), rgb(18, 21, 31))",
-    opacity: 0,
+    backgroundImage: `linear-gradient(140deg, ${colors.green}, ${colors.darkGreen} 20.71%)`,
+    opacity: 1,
   },
   visible: {
     pathLength: 1,
-    backgroundImage: "linear-gradient(rgb(18, 21, 31), rgb(18, 21, 31))",
+    backgroundImage: `linear-gradient(217deg, ${colors.green}, ${colors.lightGreen} 100%)`,
     opacity: 1,
   },
 }
 
+const MotionBox = motion(Box)
+const MotionText = motion(Text)
+
 export function Index() {
   return (
-    <Div
+    <MotionBox
+      p="4rem 2rem"
+      w="100vw"
+      h="100vh"
       variants={layer1}
       initial="hidden"
       animate="visible"
       transition={{
-        default: { delay: 0.2, duration: 1.6, ease: "easeInOut" },
-        fill: { duration: 2, ease: [1, 0, 0.8, 1] },
+        duration: 1,
+        ease: "easeInOut",
       }}
     >
-      <MountainSvg />
+      <MotionText
+        initial={{ x: -700, scale: 3 }}
+        animate={{ x: 0, scale: 1 }}
+        transition={{ duration: 0.5, type: "spring" }}
+        color="white"
+        fontSize="10rem"
+        fontFamily="Lansdowne Slanted"
+      >
+        Dartster
+      </MotionText>
+    </MotionBox>
+  )
+}
+
+export default Index
+
+//
+
+{
+  /* <MountainSvg />
       <TitleBox>
         <Title
           animate={{
@@ -47,24 +80,5 @@ export function Index() {
         >
           app name here
         </Title>
-      </TitleBox>
-    </Div>
-  )
+      </TitleBox> */
 }
-
-export default Index
-
-const Title = styled(motion.h1)`
-  font-size: 7rem;
-  font-family: "Comodo";
-  align-self: flex-start;
-  color: var(--white);
-`
-const TitleBox = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-`
-const Div = styled(motion.div)`
-  /* background: red; */
-`

@@ -1,4 +1,4 @@
-import styled from "styled-components"
+import { Box } from "@chakra-ui/react"
 
 type WrapperVariant = "small" | "regular"
 
@@ -18,26 +18,22 @@ export default function Wrapper({
   bgPic,
 }: WrapperProps) {
   return (
-    <Box color={color} bgPic={bgPic}>
-      <InnerBox size={size as WrapperVariant} bgColor={bgColor}>
+    <Box
+      color={color ?? "white"}
+      bgImage={bgPic ?? "none"}
+      bgSize="cover"
+      bgRepeat="no-repeat"
+      bgPos="center"
+    >
+      <Box
+        w="100vw"
+        bg={bgColor ?? "white"}
+        textAlign="center"
+        size={size === "small" ? "20%" : "10%"}
+        bgColor={bgColor}
+      >
         {children}
-      </InnerBox>
+      </Box>
     </Box>
   )
 }
-
-const Box = styled.div<WrapperProps>`
-  color: ${({ color }) => color ?? "var(--primary)"};
-  background-image: ${({ bgPic }) => bgPic ?? "none"};
-  background-position: center;
-  background-size: cover;
-  background-repeat: no-repeat;
-`
-
-const InnerBox = styled.div<WrapperProps>`
-  margin: 0 auto;
-  padding: ${({ size }) => (size === "small" ? "20%" : "10%")};
-  width: 100%;
-  background-color: ${({ bgColor }) => bgColor ?? "var(--white)"};
-  text-align: center;
-`

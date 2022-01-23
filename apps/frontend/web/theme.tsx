@@ -2,18 +2,6 @@ import { extendTheme } from "@chakra-ui/react"
 import { Global } from "@emotion/react"
 import { createBreakpoints } from "@chakra-ui/theme-tools"
 
-const Fonts = () => (
-  <Global
-    styles={`
-      @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;800&display=swap");
-      @font-face {
-        font-family: "Comodo";
-        src: url("./public/ComodoVintage.otf");
-      }
-  `}
-  />
-)
-
 const fonts = { heading: "Comodo" }
 
 const breakpoints = createBreakpoints({
@@ -25,9 +13,12 @@ const breakpoints = createBreakpoints({
 
 const theme = extendTheme({
   colors: {
+    green: "#4D774E",
+    darkGreen: "#164A41",
+    lightGreen: "#9DC88D",
+    yellow: "#F1B24A",
     black: "#12151f",
-    green: "#05f4b7",
-    purple: "#371bb1",
+    white: "#ffffff",
   },
   fonts,
   breakpoints,
