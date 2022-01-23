@@ -5,10 +5,19 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "prisma generate && tsc"
+    "clean": "rm -rf ./dist && rm -rf ./node_modules",
+    "build": "yarn generate && tsc",
+    "dev": "tsc --watch",
+    "seed": "ts-node ./prisma/seeders/seed.ts",
+    "generate": "yarn prisma generate",
+    "migrate:reset": "yarn prisma migrate reset",
+    "migrate:dev": "yarn prisma migrate dev"
+  },
+  "prisma": {
+    "seed": "yarn seed"
   },
   "dependencies": {
-    "@prisma/client": "^3.6.0"
+    "@prisma/client": "^3.8.1"
   },
   "devDependencies": {
     "prisma": "^3.6.0",

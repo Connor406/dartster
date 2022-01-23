@@ -7,5 +7,4 @@ COPY . .
 RUN yarn install
 RUN yarn build --scope=api --scope=db-main
 
-CMD yarn workspace @dartster/api nodemon
-# CMD yarn workspace @dartster/api start
+CMD yarn workspace @dartster/api start

@@ -1,0 +1,15 @@
+web.darts.dev {
+	reverse_proxy 0.0.0.0:3000
+	tls internal
+}
+
+docs.darts.dev {
+	reverse_proxy 0.0.0.0:3001
+	tls internal
+}
+
+api.darts.dev {
+	reverse_proxy 0.0.0.0:4000
+	tls internal
+}
+

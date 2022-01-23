@@ -12,23 +12,23 @@ services:
     ports:
       - 5432:5432
     volumes:
-      - ./db/.postgres:/var/lib/postgresql/data
+      - ./apps/backend/_db/.postgres:/var/lib/postgresql/data
 
   # Fastify API
-  api:
-    container_name: api
-    build:
-      context: ./
-      dockerfile: ./apps/backend/api/Dockerfile
-    restart: always
-    ports:
-      - 3007:3007
-    volumes:
-      - /node_modules
-      - /libs/backend/db-main/node_modules
-      - /apps/backend/api/node_modules
-    depends_on:
-      - db
+  # api:
+  #   container_name: api
+  #   build:
+  #     context: ./
+  #     dockerfile: ./apps/backend/api/Dockerfile
+  #   restart: always
+  #   ports:
+  #     - 4000:4000
+  #   volumes:
+  #     - /node_modules
+  #     - /libs/backend/db-main/node_modules
+  #     - /apps/backend/api/node_modules
+  #   depends_on:
+  #     - db
 
 # Persist database between container versions
 volumes:

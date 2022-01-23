@@ -1,8 +1,7 @@
 {
-  "watch": ["src"],
+  "watch": ["src", "tsconfig.json", ".env", "../../../libs/backend/db-main/dist"],
   "ext": "ts",
   "ignore": ["src/**/*.spec.ts"],
-  "exec": "yarn build && yarn start",
   "env": {
     "NODE_DEBUG": 9229,
     "NODE_ENV": "development"

@@ -1,6 +1,26 @@
 import fp from "fastify-plugin"
 import nodemailer from "fastify-nodemailer"
 
+declare module "fastify" {
+  export interface FastifyInstance {
+    sendEmail: (payload: Dart.SendEmailPayload) => Promise<boolean>
+    // @ts-ignore
+    nodemailer: Nodemailer
+  }
+}
+
+interface NodemailerPayload {
+  from: string
+  to: string
+  subject: string
+  html: string
+  attachments?: Array<{ filename: string; path: string }>
+}
+
+interface Nodemailer {
+  sendMail: (payload: NodemailerPayload) => Promise<unknown>
+}
+
 const SMTP_USER: string = process.env.SMTP_USER || ""
 const SMTP_PASSWORD: string = process.env.SMTP_PASSWORD || ""
 const SMTP_PORT: string = process.env.SMTP_PORT || "465"

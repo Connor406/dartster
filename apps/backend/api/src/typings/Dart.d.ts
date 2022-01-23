@@ -1,7 +1,7 @@
 import { FastifyRequest } from "fastify"
 
 declare global {
-  namespace Dart {
+  export namespace Dart {
     type SendEmailPayload = {
       to: string
       subject: string

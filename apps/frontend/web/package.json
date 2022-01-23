@@ -9,17 +9,39 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "next": "12.0.7",
-    "react": "17.0.2",
-    "react-dom": "17.0.2",
-    "ui": "*"
+    "@chakra-ui/icons": "^1.0.5",
+    "@chakra-ui/react": "^1.4.2",
+    "@chakra-ui/theme-tools": "1.1.2",
+    "@dartster/ui": "*",
+    "@emotion/react": "11.1.5",
+    "@emotion/styled": "11.1.5",
+    "@hookform/error-message": "^2.0.0",
+    "@popmotion/popcorn": "^0.4.4",
+    "@prisma/client": "^3.2.1",
+    "array-move": "^4.0.0",
+    "core-js": "^3.6.5",
+    "dotenv": "^10.0.0",
+    "framer-motion": "^4.1.17",
+    "jotai": "^1.5.3",
+    "nanoid": "^3.1.30",
+    "next": "latest",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-hook-form": "^7.17.4",
+    "react-icons": "^4.3.1",
+    "styled-components": "^5.3.3"
   },
   "devDependencies": {
     "@dartster/config": "*",
+    "@dartster/tsconfig": "*",
+    "@types/jest": "27.0.2",
+    "@types/node": "^14.6.0",
+    "@types/react": "17.0.37",
+    "@types/react-dom": "^17.0.3",
+    "@types/styled-components": "^5.1.15",
     "eslint": "7.32.0",
     "next-transpile-modules": "9.0.0",
-    "@dartster/tsconfig": "*",
-    "@types/react": "17.0.37",
+    "prettier": "^2.3.1",
     "typescript": "^4.5.3"
   }
 }

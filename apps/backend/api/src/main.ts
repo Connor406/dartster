@@ -1,6 +1,6 @@
 import createServer from "./server"
 
-const port: string = process.env.PORT || "3333"
+const port: string = process.env.PORT || "4000"
 
 const start = async () => {
   const fastify = createServer({
