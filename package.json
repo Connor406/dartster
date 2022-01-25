@@ -13,9 +13,9 @@
     "dart:dev": "turbo run dev",
     "build": "turbo run build",
     "lint": "turbo run lint",
-    "docker:start": "docker-compose up -d --build",
-    "docker:stop": "docker-compose down all",
-    "prisma": "yarn workspace db-main prisma"
+    "docker:start": "yarn workspace @dartster/db start",
+    "docker:stop": "yarn workspace @dartster/db stop",
+    "prisma": "yarn workspace @dartster/db-main prisma"
   },
   "devDependencies": {
     "prettier": "^2.5.1",
