@@ -98,6 +98,7 @@ const gameRoutes: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
           where: { id: gameId },
           data: { activePlayer: nextPlayer },
         })
+        fastify.io.emit("score", { status: "OK", user, game })
         reply.send({ status: "OK", user, game })
       } catch (error) {
         fastify.httpErrors.badRequest(error)

@@ -24,7 +24,9 @@
     "fastify-jwt": "^3.2.1",
     "fastify-nodemailer": "^5.0.0",
     "fastify-plugin": "^3.0.0",
-    "nanoid": "^3.1.30"
+    "fastify-socket.io": "^3.0.0",
+    "nanoid": "^3.1.30",
+    "socket.io": "^4.4.1"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",

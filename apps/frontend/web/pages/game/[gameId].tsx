@@ -1,4 +1,4 @@
-import axios, { API_URL } from "@/services"
+import axios, { API_URL, socket } from "@/services"
 import Axios from "axios"
 import https from "https"
 import styled from "styled-components"
@@ -28,10 +28,15 @@ export default function Game({ users, query }: Props) {
   const [canReorder, setCanReorder] = useState(false)
   const [order, updatePosition, updateOrder] = usePositionReorder(users)
 
+  socket.on("score", ({ user, game }) => {
+    setActivePlayer(game.activePlayer)
+    console.log({ user, activePlayer })
+  })
+
   useEffect(() => {
     getGameInfo().then(res => {
       const game = res.users[0].game
-      console.log(res)
+      // console.log(res)
       setActivePlayer(game?.activePlayer)
       setMyScore(me.score)
       setCanReorder(!game?.started)
@@ -41,7 +46,7 @@ export default function Game({ users, query }: Props) {
         setMessage("You're up!")
       }
     })
-  }, [me, myScore])
+  }, [me, myScore, activePlayer])
 
   function mapPlayerScores(players) {
     let playerMap = {}

@@ -3,6 +3,7 @@ dotenv.config({ path: ".env" })
 import fastify, { FastifyPluginAsync, FastifyServerOptions, FastifyInstance } from "fastify"
 import fastifyCookie from "fastify-cookie"
 import AutoLoad, { AutoloadPluginOptions } from "fastify-autoload"
+import fastifyIO from "fastify-socket.io"
 import { join } from "path"
 
 export type AppOptions = Partial<AutoloadPluginOptions>
@@ -16,6 +17,12 @@ const app: FastifyPluginAsync<AppOptions> = async (fastify, opts): Promise<void>
     credentials: true,
     origin: true,
     exposedHeaders: "Content-Disposition",
+  })
+  void fastify.register(fastifyIO, {
+    cors: {
+      origin: true,
+      methods: ["GET", "POST"],
+    },
   })
   void fastify.register(import("fastify-sensible"))
   void fastify.register(AutoLoad, {
