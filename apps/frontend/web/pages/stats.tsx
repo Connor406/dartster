@@ -10,7 +10,7 @@ export default function Stats() {
   useEffect(() => {
     try {
       const res = async () => {
-        const { data }: any = await axios.get(`/api/stats?id=${user.id}`)
+        const { data }: any = await axios.get(`/stats?id=${user.id}`)
         setStats(data)
       }
       if (user.id) res()

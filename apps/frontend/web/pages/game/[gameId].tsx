@@ -7,7 +7,8 @@ import Wrapper from "@/components/Wrapper"
 import { useEffect, useState } from "react"
 import { useAtom } from "jotai"
 import { userAtom } from "@/store"
-import { Button, Form, Input } from "@/components/styled"
+import { Button } from "@chakra-ui/react"
+import { Form, Input } from "@/components/styled"
 import { usePositionReorder } from "@/util/usePositionReorder"
 
 interface Props {
@@ -145,18 +146,20 @@ export default function Game({ users, query }: Props) {
               </Deets>
             ))}
       </Players>
-      {canReorder && <button onClick={startGame}>start</button>}
-      {activePlayer === me.username && (
+      {canReorder && <Button onClick={startGame}>start</Button>}
+      {activePlayer === me.username && !canReorder && (
         <Form onSubmit={e => calculateScore(e)}>
           <Input
             value={input}
-            placeholder="enter your score, fatty."
+            placeholder="enter your score"
             onChange={e => {
               e.preventDefault()
               setInput(e.target.value)
             }}
           ></Input>
-          <Button type="submit" />
+          <Button type="submit" variant="sticker">
+            Score
+          </Button>
         </Form>
       )}
     </Wrapper>

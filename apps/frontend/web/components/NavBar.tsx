@@ -3,7 +3,7 @@ import { useEffect } from "react"
 import { useAtom } from "jotai"
 import { userAtom } from "@/store"
 import { Box, LinkProps } from "@chakra-ui/layout"
-import { ComponentWithAs, Link } from "@chakra-ui/react"
+import { Link } from "@chakra-ui/react"
 import { useRouter } from "next/router"
 
 const NavBar: React.FC = () => {
@@ -29,7 +29,7 @@ const NavBar: React.FC = () => {
 
   useEffect(() => {
     meQuery()
-  }, [])
+  }, [router.pathname])
 
   return (
     <Box

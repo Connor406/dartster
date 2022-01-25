@@ -19,7 +19,7 @@ export default function Wrapper({
 }: WrapperProps) {
   return (
     <Box
-      color={color ?? "white"}
+      color={color ?? "black"}
       bgImage={bgPic ?? "none"}
       bgSize="cover"
       bgRepeat="no-repeat"
@@ -31,6 +31,7 @@ export default function Wrapper({
         textAlign="center"
         size={size === "small" ? "20%" : "10%"}
         bgColor={bgColor}
+        p="4rem 2rem"
       >
         {children}
       </Box>

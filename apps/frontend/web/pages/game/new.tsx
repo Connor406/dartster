@@ -4,7 +4,8 @@ import { useAtom } from "jotai"
 import { userAtom } from "@/store"
 import { useForm } from "react-hook-form"
 import styled from "styled-components"
-import { Button, Form, Input } from "@/components/styled"
+import { Form, Input } from "@/components/styled"
+import { Button } from "@chakra-ui/react"
 import Wrapper from "@/components/Wrapper"
 import PlayerCards from "@/components/Motion/PlayerCard"
 import { useRouter } from "next/router"
@@ -69,14 +70,8 @@ export default function NewGame() {
     }
   }
 
-  // Search by username
-  // Autocomplete should return results
-  // Click name to add user to player cards
-  // Drag and drop to reorder players
-  // Click button to make post request to /api/game/new route
-  // If worked, should dynamically route page to `/${gameId}` page
   return (
-    <Wrapper size="small" color={"var(--black)"}>
+    <Wrapper size="small">
       <Title>New game</Title>
       <PlayerCards players={players} me={user.username} deselect={deselectUser} />
       <Form onSubmit={handleSubmit(onSubmit)}>
@@ -109,7 +104,9 @@ export default function NewGame() {
           <option value="401">401</option>
           <option value="501">501</option>
         </Select>
-        <Button type="submit" onSubmit={onSubmit} />
+        <Button type="submit" onSubmit={onSubmit}>
+          Start
+        </Button>
       </Form>
     </Wrapper>
   )
