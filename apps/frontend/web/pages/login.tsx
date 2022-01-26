@@ -16,13 +16,14 @@ export default function Login() {
     watch,
     formState: { errors },
   } = useForm()
-  const [userError, setUserError] = useState("")
   const router = useRouter()
 
   const onSubmit: SubmitHandler<Form> = async userInput => {
     const { data } = await axios.post(`${API_URL}/user/login`, userInput)
     if (data) router.push("/")
   }
+
+  // TODO: add 'forgot password' and 'change password' buttons
 
   return (
     <Style.Wrap>
@@ -44,13 +45,6 @@ export default function Login() {
           })}
         />
         <Style.Button type="submit" />
-        {/* {message && (
-          <Style.Error>
-            {message[0]?.type && message[0]?.type !== "validate"
-              ? message[0]?.type
-              : message[0]?.message ?? ""}
-          </Style.Error>
-        )} */}
       </Style.Form>
     </Style.Wrap>
   )

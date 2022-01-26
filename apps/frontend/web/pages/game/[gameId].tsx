@@ -40,7 +40,14 @@ export default function Game({ users, query }: Props) {
       setActivePlayer(game?.activePlayer)
       setMyScore(me.score)
       setCanReorder(!game?.started)
-      setPlayerOrder(game.playerOrder)
+      setPlayerOrder([
+        game?.player1,
+        game?.player2,
+        game?.player3,
+        game?.player4,
+        game?.player5,
+        game?.player6,
+      ])
       setScores(mapPlayerScores(res.users))
       if (res?.activePlayer === me.username) {
         setMessage("You're up!")
@@ -144,7 +151,7 @@ export default function Game({ users, query }: Props) {
                 key={user.username}
               />
             ))
-          : playerOrder.map((user, i) => (
+          : playerOrder?.map((user, i) => (
               <Deets key={user}>
                 <P isActive={activePlayer === user}>{user}</P>
                 <Score isActive={activePlayer === user}>{scores[user]}</Score>

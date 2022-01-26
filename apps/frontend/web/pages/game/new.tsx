@@ -63,7 +63,7 @@ export default function NewGame() {
     const body = { startingScore, players }
     const { data }: any = await axios.post(`${API_URL}/game/new`, body)
     if (data) {
-      router.push(`/game/${data.newGame.id}?user=${user.id}`)
+      router.push(`/game/${data.newGame.id}`)
       return data
     } else {
       return "Unable to create game"

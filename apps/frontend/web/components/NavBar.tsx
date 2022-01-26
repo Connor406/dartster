@@ -25,6 +25,7 @@ const NavBar: React.FC = () => {
   async function logout(e) {
     e.preventDefault()
     await axios.post(`${API_URL}/user/logout`, {}, { withCredentials: true })
+    router.reload()
   }
 
   useEffect(() => {
