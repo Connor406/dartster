@@ -30,7 +30,7 @@ export default function Game({ users, query }: Props) {
 
   socket.on("score", ({ user, game }) => {
     setActivePlayer(game.activePlayer)
-    console.log({ user, activePlayer })
+    console.log({ user, game })
   })
 
   useEffect(() => {

@@ -1,8 +1,11 @@
 import { FastifyPluginAsync, FastifyReply, FastifyRequest } from "fastify"
-import { genSalt, hash, compare } from "bcryptjs"
+import { genSalt, hash } from "bcryptjs"
 import * as crypto from "crypto"
 import {
+  authorizeUser,
+  changePassword,
   createNewSession,
+  getUserFromCookies,
   logUserOut,
   refreshTokens,
   returnUserFromAccessToken,
@@ -15,16 +18,8 @@ const { JWT_SECRET } = process.env
 const userRoutes: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
   fastify.get("/me", {}, async function (request: FastifyRequest, reply: FastifyReply) {
     try {
-      if (request?.cookies?.accessToken) {
-        const user = await returnUserFromAccessToken(fastify, request)
-        reply.send({ user })
-      } else if (request?.cookies?.refreshToken) {
-        const { user, sessionToken } = await refreshTokens(request, fastify)
-        await setUserCookies(reply, sessionToken, user.id)
-        reply.send({ user })
-      } else {
-        reply.send({ user: null })
-      }
+      const user = await getUserFromCookies(fastify, request, reply)
+      reply.send(user)
     } catch (error) {
       throw fastify.httpErrors.badRequest(error)
     }
@@ -105,24 +100,38 @@ const userRoutes: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
         throw fastify.httpErrors.badRequest(e)
       }
     }),
-    fastify.post("/login", {}, async function (request: Dart.LogUserIn, reply: FastifyReply) {
+    fastify.post("/change-password", {}, async function (request: any, reply) {
       try {
-        const { username, password } = request.body
-        const user = await fastify.prisma.user.findUnique({ where: { username } })
-        const dbPassword = user.password
-        const sessionToken = crypto.randomBytes(42).toString("hex")
-        const isAuthorized = await compare(password, dbPassword)
-        if (isAuthorized) {
-          await createNewSession(fastify, sessionToken, request, user.id)
-          await setUserCookies(reply, sessionToken, user.id)
-          reply.send(`User ${user.username} logged in`)
-        } else {
-          reply.send({ error: "Unable to authorize user" })
-        }
-      } catch (error) {
-        throw fastify.httpErrors.badRequest(error)
+        const { oldPassword, newPassword } = request.body
+        const { user: cookieUser } = await getUserFromCookies(fastify, request, reply)
+        const { isAuthorized, user } = await authorizeUser(
+          fastify,
+          cookieUser.username,
+          oldPassword
+        )
+        if (!isAuthorized || !cookieUser?.email) reply.code(401).send()
+        await changePassword(fastify, user.id, newPassword)
+        reply.send("password changed")
+      } catch (err) {
+        reply.code(401).send(fastify.httpErrors.badRequest(err))
       }
-    }),
+    })
+  fastify.post("/login", {}, async function (request: Dart.LogUserIn, reply: FastifyReply) {
+    try {
+      const { username, password } = request.body
+      const sessionToken = crypto.randomBytes(42).toString("hex")
+      const { isAuthorized, user } = await authorizeUser(fastify, username, password)
+      if (isAuthorized) {
+        await createNewSession(fastify, sessionToken, request, user.id)
+        await setUserCookies(reply, sessionToken, user.id)
+        reply.send(`User ${user.username} logged in`)
+      } else {
+        reply.send({ error: "Unable to authorize user" })
+      }
+    } catch (error) {
+      throw fastify.httpErrors.badRequest(error)
+    }
+  }),
     fastify.post("/logout", {}, async function (request: FastifyRequest, reply: FastifyReply) {
       try {
         await logUserOut(request, reply, fastify)

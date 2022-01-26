@@ -38,12 +38,17 @@ model user_stats {
 }
 
 model game {
-  id           String   @id @default(uuid())
+  id           String  @id @default(uuid())
   winnerId     String?
   activePlayer String?
-  started      Boolean  @default(false)
+  started      Boolean @default(false)
   captain      String
-  playerOrder  String[]
+  player1      String
+  player2      String?
+  player3      String?
+  player4      String?
+  player5      String?
+  player6      String?
   user         user[]
 }
 

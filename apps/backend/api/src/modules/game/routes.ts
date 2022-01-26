@@ -39,8 +39,7 @@ const gameRoutes: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
         data: {
           winnerId: "",
           captain: players[0],
-          playerOrder: players,
-          activePlayer: players[0],
+          ...(fastify.game.updatePlayers(players) as any),
           started: false,
         },
       })
@@ -78,7 +77,7 @@ const gameRoutes: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
       const activePlayer = players[0]
       const game = await fastify.prisma.game.update({
         where: { id },
-        data: { activePlayer, playerOrder: players, started: true },
+        data: { activePlayer, ...fastify.game.updatePlayers(players), started: true },
       })
       reply.send({ game })
     } catch (error) {
