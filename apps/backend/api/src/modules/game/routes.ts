@@ -1,109 +1,100 @@
-import { game, user } from "@dartster/db-main"
 import { FastifyPluginAsync, FastifyReply, FastifyRequest } from "fastify"
-import { nanoid } from "nanoid"
 
 type GetGameRequest = FastifyRequest<{
   Querystring: { id: string }
 }>
 
+interface Players {
+  [playerX: string]: { username: string; score: number }
+}
+
 type NewGameRequest = FastifyRequest<{
   Body: {
-    players: string[]
-    startingScore: number
-    // set to player who started game
-    captain: string
+    players: Players
   }
 }>
 
 type StartGame = FastifyRequest<{
   Body: {
     id: string
-    players: string[]
+    players: Players
   }
 }>
 
 type UpdateScore = FastifyRequest<{
   Body: {
-    id: user["id"]
-    gameId: game["id"]
-    score: number
+    id: string
+    players: Players
     nextPlayer: string
   }
 }>
 
 const gameRoutes: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
+  fastify.get("/", {}, async function (request: GetGameRequest, reply: FastifyReply) {
+    try {
+      const { id } = request.query
+      const game = await fastify.prisma.game.findUnique({
+        where: { id },
+      })
+      reply.send(game)
+    } catch (error) {
+      fastify.httpErrors.badRequest(error)
+      reply.code(400).send(error)
+    }
+  })
   fastify.post("/new", {}, async function (request: NewGameRequest, reply: FastifyReply) {
     try {
-      const { players, startingScore } = request.body
+      const { players } = request.body
+      const usernames = []
+      for (const v of Object.values(players)) {
+        usernames.push(v.username)
+      }
       const newGame = await fastify.prisma.game.create({
         data: {
-          winnerId: "",
-          captain: players[0],
-          ...(fastify.game.updatePlayers(players) as any),
+          captain: players.player1.username,
+          activePlayer: players.player1.username,
           started: false,
+          players,
         },
       })
       await fastify.prisma.user.updateMany({
-        where: { username: { in: request.body.players } },
-        data: { gameId: newGame.id, score: startingScore },
+        where: { username: { in: usernames } },
+        data: { gameId: newGame.id },
       })
-      reply.send({ newGame, startingScore })
+      reply.send(newGame)
     } catch (error) {
       fastify.httpErrors.badRequest(error)
       reply.code(400).send(error)
     }
-  }),
-    fastify.get("/", {}, async function (request: GetGameRequest, reply: FastifyReply) {
-      try {
-        const { id } = request.query
-        const users = await fastify.prisma.user.findMany({
-          where: { gameId: id },
-          select: {
-            id: true,
-            username: true,
-            score: true,
-            game: true,
-          },
-        })
-        reply.send({ users })
-      } catch (error) {
-        fastify.httpErrors.badRequest(error)
-        reply.code(400).send(error)
-      }
-    })
+  })
   fastify.post("/start", {}, async function (request: StartGame, reply: FastifyReply) {
     try {
       const { players, id } = request.body
-      const activePlayer = players[0]
+      const activePlayer = players.player1.username
       const game = await fastify.prisma.game.update({
         where: { id },
-        data: { activePlayer, ...fastify.game.updatePlayers(players), started: true },
+        data: { activePlayer, players, started: true },
       })
-      reply.send({ game })
+      reply.send(game)
     } catch (error) {
       fastify.httpErrors.badRequest(error)
       reply.code(400).send(error)
     }
-  }),
-    fastify.post("/update-score", {}, async function (request: UpdateScore, reply: FastifyReply) {
-      try {
-        const { id, score, gameId, nextPlayer } = request.body
-        const user = await fastify.prisma.user.update({
-          where: { id },
-          data: { score },
-          select: { score: true, id: true, game: true },
-        })
-        const game = await fastify.prisma.game.update({
-          where: { id: gameId },
-          data: { activePlayer: nextPlayer },
-        })
-        fastify.io.emit("score", { status: "OK", user, game })
-        reply.send({ status: "OK", user, game })
-      } catch (error) {
-        fastify.httpErrors.badRequest(error)
-        reply.code(400).send(error)
-      }
-    })
+  })
+  fastify.post("/update-score", {}, async function (request: UpdateScore, reply: FastifyReply) {
+    try {
+      const { id, players, nextPlayer } = request.body
+      const game = await fastify.prisma.game.update({
+        where: { id },
+        data: { players, activePlayer: nextPlayer },
+      })
+      fastify.io.emit("score", { status: "OK", game })
+      reply.send({ status: "OK", game })
+    } catch (error) {
+      fastify.httpErrors.badRequest(error)
+      reply.code(400).send(error)
+    }
+  })
 }
 
 export default gameRoutes

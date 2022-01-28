@@ -24,8 +24,6 @@ model user {
   user_stats user_stats?
   game       game?       @relation(fields: [gameId], references: [id])
   gameId     String?
-  score      Int?        @default(0)
-  position   Int         @default(0)
 }
 
 model user_stats {
@@ -43,16 +41,11 @@ model game {
   activePlayer String?
   started      Boolean @default(false)
   captain      String
-  player1      String
-  player2      String?
-  player3      String?
-  player4      String?
-  player5      String?
-  player6      String?
+  players      Json
   user         user[]
 }
 
-model Session {
+model session {
   sessionToken String   @id
   userId       String
   valid        Boolean

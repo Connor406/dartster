@@ -10,83 +10,78 @@ import { userAtom } from "@/store"
 import { Button } from "@chakra-ui/react"
 import { Form, Input } from "@/components/styled"
 import { usePositionReorder } from "@/util/usePositionReorder"
+import { gameAtom } from "@/store/game"
+
+interface IPlayer {
+  [playerX: string]: {
+    score: number
+    username: string
+  }
+}
+
+interface Game {
+  id: string
+  winnerId: string | null
+  activePlayer: string
+  started: boolean
+  captain: string
+  players: IPlayer
+}
 
 interface Props {
   users: any[]
   query: { user: string; gameId: string }
+  gameProps: Game
 }
 
-export default function Game({ users, query }: Props) {
+export default function Game({ users, query, gameProps }: Props) {
   // me query return value
   const [me, setMe] = useAtom(userAtom)
-  const [myScore, setMyScore] = useState(me.score)
-  const [scores, setScores] = useState({})
+  const [game, setGame] = useAtom(gameAtom)
+  const [myScore, setMyScore] = useState(game?.players["player1"].score)
   const [message, setMessage] = useState("")
   const [input, setInput] = useState(0)
   const [playerOrder, setPlayerOrder] = useState([])
   const [activePlayer, setActivePlayer] = useState("")
-  const [canReorder, setCanReorder] = useState(false)
   const [order, updatePosition, updateOrder] = usePositionReorder(users)
 
+  const canReorder = !game?.started
+
   socket.on("score", ({ user, game }) => {
-    setActivePlayer(game.activePlayer)
+    setGame(game)
     console.log({ user, game })
   })
 
+  // TODO: fix jotai query so i don't have to do this
   useEffect(() => {
-    getGameInfo().then(res => {
-      const game = res.users[0].game
-      // console.log(res)
-      setActivePlayer(game?.activePlayer)
-      setMyScore(me.score)
-      setCanReorder(!game?.started)
-      setPlayerOrder([
-        game?.player1,
-        game?.player2,
-        game?.player3,
-        game?.player4,
-        game?.player5,
-        game?.player6,
-      ])
-      setScores(mapPlayerScores(res.users))
-      if (res?.activePlayer === me.username) {
-        setMessage("You're up!")
-      }
-    })
-  }, [me, myScore, activePlayer])
+    setGame(gameProps as any)
+  }, [])
 
-  function mapPlayerScores(players) {
-    let playerMap = {}
-    for (const player of players) {
-      playerMap = {
-        ...playerMap,
-        [player.username]: player.score,
-      }
-    }
-    if (Object.keys(playerMap).length === players.length) {
-      return playerMap
-    }
-  }
+  useEffect(() => {
+    tempStateSetterThatShouldBeRefactored()
+    setActivePlayer(game?.activePlayer)
+  }, [me, game, activePlayer])
 
-  async function getGameInfo() {
-    const res: any = await axios.get(`${API_URL}/game?id=${query.gameId}`)
-    if (res.data) {
-      return res.data
+  function tempStateSetterThatShouldBeRefactored() {
+    const playerOrder = []
+    if (!game) return
+    for (const p of Object.values(game?.players) as any) {
+      if (p.username === me.username) setMyScore(p.score)
+      playerOrder.push(p.username)
     }
+    setPlayerOrder(playerOrder)
   }
 
   async function startGame() {
     if (order) {
-      const players = order.map(p => {
-        return p.username
+      const players = {}
+      order.map((p, i) => {
+        return (players[`player${i + 1}`] = { username: p, score: myScore })
       })
       const body = { id: query.gameId, players }
-      const res: any = await axios.post(`${API_URL}/game/start`, body)
-      if (res.data) {
-        setCanReorder(false)
-        setPlayerOrder(res.data.game.playerOrder)
-        setActivePlayer(res.data.game.activePlayer)
-      }
+      const { data }: any = await axios.post(`${API_URL}/game/start`, body)
+      if (!data) throw "Start failed"
+      setGame(data)
     } else {
       throw new Error("unable to start game")
     }
@@ -148,13 +143,15 @@ export default function Game({ users, query }: Props) {
                 updateOrder={updateOrder}
                 updatePosition={updatePosition}
                 user={user}
-                key={user.username}
+                key={user}
               />
             ))
           : playerOrder?.map((user, i) => (
               <Deets key={user}>
                 <P isActive={activePlayer === user}>{user}</P>
-                <Score isActive={activePlayer === user}>{scores[user]}</Score>
+                <Score isActive={activePlayer === user}>
+                  {Object.values(game?.players).filter(p => p.username === user)[0].score}
+                </Score>
               </Deets>
             ))}
       </Players>
@@ -183,8 +180,14 @@ export async function getServerSideProps(context) {
   const httpsAgent = new https.Agent({
     rejectUnauthorized: process.env.NEXT_PUBLIC_DART_ENV === "local" ? false : true,
   })
-  const res: any = await Axios.get(`${API_URL}/game?id=${query.gameId}`, { httpsAgent })
-  return { props: { users: res.data.users, query } }
+  const { data } = await Axios.get(`${API_URL}/game?id=${query.gameId}`, { httpsAgent })
+  if (!data) throw "Bad game request"
+  const users: any[] = []
+  for (const p of Object.values(data.players)) {
+    // @ts-ignore
+    users.push(p.username)
+  }
+  return { props: { users, gameProps: data, query } }
 }
 
 type StyleProps = {

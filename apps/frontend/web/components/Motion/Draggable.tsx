@@ -46,7 +46,7 @@ export default function Player({ i, user, updatePosition, updateOrder, reorder }
             "rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 20px 30px -5px",
         }}
       >
-        {user.username}
+        {user}
         <GiDart />
       </MotionBox>
     </Li>

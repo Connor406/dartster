@@ -1,6 +1,5 @@
 import * as jwt from "jsonwebtoken"
 import { genSalt, hash, compare } from "bcryptjs"
-import { user } from "@prisma/client"
 import { FastifyInstance } from "fastify"
 
 const { ROOT_DOMAIN, JWT_SECRET } = process.env
@@ -67,7 +66,6 @@ export async function returnUserFromAccessToken(fastify, request) {
         email: true,
         id: true,
         user_stats: true,
-        score: true,
         game: true,
         gameId: true,
       },
@@ -124,7 +122,7 @@ export async function authorizeUser(fastify, username, password) {
 
 export async function getUserFromCookies(fastify, request, reply) {
   if (request?.cookies?.accessToken) {
-    const user: user = await returnUserFromAccessToken(fastify, request)
+    const user = await returnUserFromAccessToken(fastify, request)
     return { user }
   } else if (request?.cookies?.refreshToken) {
     const { user, sessionToken } = await refreshTokens(request, fastify)

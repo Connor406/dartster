@@ -1,11 +1,12 @@
 import { atom } from "jotai"
 
 const gameAtom = atom({
-  activePlayer: "",
   id: "",
-  captain: "",
+  winnerId: null,
+  activePlayer: "",
   started: false,
-  winnerId: "",
+  captain: "",
+  players: { player1: { username: "player 1", score: 501 } },
 })
 
 export { gameAtom }

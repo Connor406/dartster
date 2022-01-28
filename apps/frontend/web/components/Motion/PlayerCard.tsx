@@ -10,8 +10,6 @@ interface Props {
 }
 
 export default function PlayerCards({ players, me, deselect }: Props) {
-  console.log(players)
-
   return (
     <Wrap>
       {players.map((player, index) => {

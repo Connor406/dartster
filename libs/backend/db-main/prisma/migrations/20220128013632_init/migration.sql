@@ -10,8 +10,6 @@ CREATE TABLE "user" (
     "createdAt" TIMESTAMP(3) NOT NULL,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "gameId" TEXT,
-    "score" INTEGER DEFAULT 0,
-    "position" INTEGER NOT NULL DEFAULT 0,
 
     CONSTRAINT "user_pkey" PRIMARY KEY ("id")
 );
@@ -34,13 +32,13 @@ CREATE TABLE "game" (
     "activePlayer" TEXT,
     "started" BOOLEAN NOT NULL DEFAULT false,
     "captain" TEXT NOT NULL,
-    "playerOrder" TEXT[],
+    "players" JSONB NOT NULL,
 
     CONSTRAINT "game_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "Session" (
+CREATE TABLE "session" (
     "sessionToken" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
     "valid" BOOLEAN NOT NULL,
@@ -49,7 +47,7 @@ CREATE TABLE "Session" (
     "createdAt" TIMESTAMP(3) NOT NULL,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "Session_pkey" PRIMARY KEY ("sessionToken")
+    CONSTRAINT "session_pkey" PRIMARY KEY ("sessionToken")
 );
 
 -- CreateIndex
