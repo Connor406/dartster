@@ -1,8 +1,8 @@
+import styled from "styled-components"
 import { motion } from "framer-motion"
 import { useState } from "react"
 import { useMeasurePosition } from "../../util/useMeasurePosition"
 import { GiDart } from "react-icons/gi"
-import styled from "styled-components"
 import { Box } from "@chakra-ui/react"
 
 export default function Player({ i, user, updatePosition, updateOrder, reorder }) {
@@ -13,6 +13,7 @@ export default function Player({ i, user, updatePosition, updateOrder, reorder }
   return (
     <Li style={{ zIndex: isDragging ? 3 : 1 }}>
       <MotionBox
+        id={user}
         padding="2em"
         bg="white"
         color="green"
@@ -24,7 +25,7 @@ export default function Player({ i, user, updatePosition, updateOrder, reorder }
         ref={ref}
         dragConstraints={{ top: 0, bottom: 0 }}
         dragElastic={1}
-        key={user.username}
+        key={user}
         animate={{
           scale: isDragging ? 1.05 : 1,
         }}

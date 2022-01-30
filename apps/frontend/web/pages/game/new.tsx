@@ -16,9 +16,10 @@ export default function NewGame() {
   // value of search input
   const [value, setValue] = useState("")
   // results from searching players
-  const [result, setResult] = useState([{ username: "", id: 1 }])
+  const [result, setResult] = useState([{ username: "", id: "1" }])
   // array of players
-  const [players, setPlayers] = useState([""])
+  const [players, setPlayers] = useState([{ id: "1", username: "" }])
+  console.log(players)
   // form shit
   const { register, handleSubmit } = useForm()
   const onSubmit = data => createNewGame({ startingScore: Number(data.startingScore), players })
@@ -43,27 +44,31 @@ export default function NewGame() {
   }, [value])
   // sets current user to first player
   useEffect(() => {
-    setPlayers([user.username])
+    setPlayers([{ id: user.id, username: user.username }])
   }, [user])
 
-  function selectUser(username) {
-    setPlayers([...players, username])
-    setResult([{ username: "", id: 1 }])
+  function selectUser(user) {
+    setPlayers([...players, user])
+    setResult([{ username: "", id: "1" }])
     setValue("")
   }
 
-  function deselectUser(index) {
-    if (index === players.indexOf(user.username)) return
-    const Players = players
-    Players.splice(index, 1)
-    setPlayers([...Players])
+  function deselectUser(id: string) {
+    const playerArr = Object.values(players)
+    playerArr.forEach(player => {
+      if (id !== player.id) return
+      const Players = players
+      Players.splice(Players.indexOf(player), 1)
+      setPlayers([...Players])
+    })
   }
 
   async function createNewGame({ players, startingScore }) {
     const playerMap = {}
-    players.forEach((p, i) => (playerMap[`player${i + 1}`] = { username: p, score: startingScore }))
-    const body = { players: playerMap }
-    const { data }: any = await axios.post(`${API_URL}/game/new`, body)
+    players.forEach(
+      (p, i) => (playerMap[i + 1] = { id: p.id, username: p.username, score: startingScore })
+    )
+    const { data }: any = await axios.post(`${API_URL}/game/new`, playerMap)
     if (data) {
       router.push(`/game/${data.id}`)
       return data
@@ -88,11 +93,7 @@ export default function NewGame() {
           {result.map((user, i) => {
             return (
               user.username && (
-                <Result
-                  style={{ listStyleType: "none" }}
-                  key={i}
-                  onClick={() => selectUser(user.username)}
-                >
+                <Result style={{ listStyleType: "none" }} key={i} onClick={() => selectUser(user)}>
                   {user.username}
                 </Result>
               )

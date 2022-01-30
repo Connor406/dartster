@@ -1,0 +1,35 @@
+#### New game
+POST {{host}}/game/new
+Content-Type: application/json
+
+{
+	"1": { "id": "87d4cdab-9c42-4235-9e72-f8fd81eaabd7", "username": "mahan406", "score": 201 },
+	"2": { "id": "1e1a6f1b-1e14-4c33-9d1c-3097a39824c1", "username": "rico", "score": 201 }
+}
+
+
+#### Update score
+PUT {{host}}/game/score
+Content-Type: application/json
+
+{
+	"id": "68db879a-d7b1-4e4d-a515-bdf50112f99d",
+	"players": {
+		"1": { "id": "87d4cdab-9c42-4235-9e72-f8fd81eaabd7", "username": "mahan406", "score": 150 },
+		"2": {  "id": "1e1a6f1b-1e14-4c33-9d1c-3097a39824c1", "username": "rico", "score": 201 }
+	},
+	"nextPlayer": "rico"
+}
+
+#### Win game
+PUT {{host}}/game/win
+Content-Type: application/json
+
+{
+	"gameId": "c68afbd1-4987-4731-8618-0bdde5a50687",
+	"winnerId": "464d7ece-ccb0-4033-9858-a2e44d5ee15c"
+}
+
+
+#### Get game by ID
+GET {{host}}/game?id=68db879a-d7b1-4e4d-a515-bdf50112f99d

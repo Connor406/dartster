@@ -4,14 +4,18 @@ type GetGameRequest = FastifyRequest<{
   Querystring: { id: string }
 }>
 
+interface Player {
+  id: string
+  username: string
+  score: number
+}
+
 interface Players {
-  [playerX: string]: { username: string; score: number }
+  [playerX: number]: Player
 }
 
 type NewGameRequest = FastifyRequest<{
-  Body: {
-    players: Players
-  }
+  Body: Players
 }>
 
 type StartGame = FastifyRequest<{
@@ -26,6 +30,13 @@ type UpdateScore = FastifyRequest<{
     id: string
     players: Players
     nextPlayer: string
+  }
+}>
+
+type WinGame = FastifyRequest<{
+  Body: {
+    gameId: string
+    winnerId: string
   }
 }>
 
@@ -44,15 +55,17 @@ const gameRoutes: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
   })
   fastify.post("/new", {}, async function (request: NewGameRequest, reply: FastifyReply) {
     try {
-      const { players } = request.body
+      const players = request.body
       const usernames = []
-      for (const v of Object.values(players)) {
-        usernames.push(v.username)
+      for (const player of Object.values(players)) {
+        console.log({ player })
+        usernames.push(player.username)
       }
+      const player1 = players[1].username
       const newGame = await fastify.prisma.game.create({
         data: {
-          captain: players.player1.username,
-          activePlayer: players.player1.username,
+          captain: player1,
+          activePlayer: player1,
           started: false,
           players,
         },
@@ -67,10 +80,10 @@ const gameRoutes: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
       reply.code(400).send(error)
     }
   })
-  fastify.post("/start", {}, async function (request: StartGame, reply: FastifyReply) {
+  fastify.put("/start", {}, async function (request: StartGame, reply: FastifyReply) {
     try {
       const { players, id } = request.body
-      const activePlayer = players.player1.username
+      const activePlayer = players[1].username
       const game = await fastify.prisma.game.update({
         where: { id },
         data: { activePlayer, players, started: true },
@@ -81,7 +94,7 @@ const gameRoutes: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
       reply.code(400).send(error)
     }
   })
-  fastify.post("/update-score", {}, async function (request: UpdateScore, reply: FastifyReply) {
+  fastify.put("/score", {}, async function (request: UpdateScore, reply: FastifyReply) {
     try {
       const { id, players, nextPlayer } = request.body
       const game = await fastify.prisma.game.update({
@@ -90,6 +103,49 @@ const gameRoutes: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
       })
       fastify.io.emit("score", { status: "OK", game })
       reply.send({ status: "OK", game })
+    } catch (error) {
+      fastify.httpErrors.badRequest(error)
+      reply.code(400).send(error)
+    }
+  })
+
+  fastify.put("/win", {}, async function (request: WinGame, reply: FastifyReply) {
+    try {
+      const { gameId, winnerId } = request.body
+      const game = await fastify.prisma.game.update({
+        where: { id: gameId },
+        data: { winnerId, activePlayer: null },
+      })
+      const loserIds: string[] = []
+      for (const v of Object.values(game.players)) {
+        // @ts-ignore
+        loserIds.push(v)
+      }
+      console.log("🚨", loserIds)
+      const winner = await fastify.prisma.user.update({
+        where: { id: winnerId },
+        data: {
+          gameId: null,
+          user_stats: {
+            update: { wins: { increment: 1 }, points: { increment: 100 } },
+          },
+        },
+        select: { id: true, username: true, user_stats: true },
+      })
+      // update losers
+      const losers = loserIds.map(loser => {
+        return fastify.prisma.user.update({
+          where: { id: loser },
+          data: {
+            gameId: null,
+            user_stats: {
+              update: { losses: { increment: 1 }, points: { decrement: 5 } },
+            },
+          },
+        })
+      })
+      await fastify.prisma.$transaction(losers)
+      reply.send({ game, winner, losers })
     } catch (error) {
       fastify.httpErrors.badRequest(error)
       reply.code(400).send(error)

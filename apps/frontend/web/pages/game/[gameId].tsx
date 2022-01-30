@@ -3,17 +3,21 @@ import Axios from "axios"
 import https from "https"
 import styled from "styled-components"
 import Player from "@/components/Motion/Draggable"
+import FireworkShow from "@/components/Fireworks"
 import Wrapper from "@/components/Wrapper"
 import { useEffect, useState } from "react"
 import { useAtom } from "jotai"
+import { useAtomValue } from "jotai/utils"
 import { userAtom } from "@/store"
-import { Button } from "@chakra-ui/react"
+import { Box, Button } from "@chakra-ui/react"
 import { Form, Input } from "@/components/styled"
 import { usePositionReorder } from "@/util/usePositionReorder"
 import { gameAtom } from "@/store/game"
+import { getUserPosition } from "@/util/parse"
 
 interface IPlayer {
   [playerX: string]: {
+    id: string
     score: number
     username: string
   }
@@ -29,27 +33,27 @@ interface Game {
 }
 
 interface Props {
-  users: any[]
+  users: IPlayer[]
   query: { user: string; gameId: string }
   gameProps: Game
 }
 
 export default function Game({ users, query, gameProps }: Props) {
   // me query return value
-  const [me, setMe] = useAtom(userAtom)
+  const me = useAtomValue(userAtom)
   const [game, setGame] = useAtom(gameAtom)
-  const [myScore, setMyScore] = useState(game?.players["player1"].score)
-  const [message, setMessage] = useState("")
-  const [input, setInput] = useState(0)
-  const [playerOrder, setPlayerOrder] = useState([])
-  const [activePlayer, setActivePlayer] = useState("")
   const [order, updatePosition, updateOrder] = usePositionReorder(users)
+  const [message, setMessage] = useState({ message: "", color: "black" })
+  const [input, setInput] = useState(0)
 
+  const myPosition = getUserPosition(game?.players, me?.username)
+  const myScore = game?.players[myPosition]?.score
+  const activePlayer = game?.activePlayer
   const canReorder = !game?.started
 
-  socket.on("score", ({ user, game }) => {
+  socket.on("score", ({ game }) => {
     setGame(game)
-    console.log({ user, game })
+    console.log({ game })
   })
 
   // TODO: fix jotai query so i don't have to do this
@@ -57,29 +61,14 @@ export default function Game({ users, query, gameProps }: Props) {
     setGame(gameProps as any)
   }, [])
 
-  useEffect(() => {
-    tempStateSetterThatShouldBeRefactored()
-    setActivePlayer(game?.activePlayer)
-  }, [me, game, activePlayer])
-
-  function tempStateSetterThatShouldBeRefactored() {
-    const playerOrder = []
-    if (!game) return
-    for (const p of Object.values(game?.players) as any) {
-      if (p.username === me.username) setMyScore(p.score)
-      playerOrder.push(p.username)
-    }
-    setPlayerOrder(playerOrder)
-  }
-
   async function startGame() {
     if (order) {
       const players = {}
       order.map((p, i) => {
-        return (players[`player${i + 1}`] = { username: p, score: myScore })
+        return (players[i + 1] = { id: p.id, username: p.id, score: myScore })
       })
       const body = { id: query.gameId, players }
-      const { data }: any = await axios.post(`${API_URL}/game/start`, body)
+      const { data }: any = await axios.put(`${API_URL}/game/start`, body)
       if (!data) throw "Start failed"
       setGame(data)
     } else {
@@ -88,27 +77,28 @@ export default function Game({ users, query, gameProps }: Props) {
   }
 
   function getNextPlayer() {
-    const myIndex = order.findIndex(user => user?.username === me?.username)
-    if (myIndex + 1 < order.length) {
-      return order[myIndex + 1]?.username
+    if (game?.players[myPosition + 1]) {
+      return game?.players[myPosition + 1].username
     } else {
-      return order[0]?.username
+      return game?.players[1].username
     }
   }
 
-  async function submitScore(roundScore: number) {
+  async function submitScore(newScore: number) {
     try {
       const body = {
-        id: me.id,
-        gameId: query.gameId,
-        score: roundScore,
+        id: query.gameId,
+        players: {
+          ...game.players,
+          [myPosition]: { id: me.id, username: me.username, score: newScore },
+        },
         nextPlayer: getNextPlayer(),
       }
-      const { data }: any = await axios.post(`${API_URL}/game/update-score`, body)
-      if (data) {
-        setMyScore(data.user.score)
-        setActivePlayer(data.game.activePlayer)
+      const { data }: any = await axios.put(`${API_URL}/game/score`, body)
+      if (!data) {
+        setMessage({ message: "Could not update score", color: "red" })
       }
+      setInput(0)
     } catch (error) {
       console.log(error)
     }
@@ -116,24 +106,30 @@ export default function Game({ users, query, gameProps }: Props) {
 
   async function calculateScore(e) {
     e.preventDefault()
-    const roundScore = myScore - Number(input)
-    if (roundScore < 0) {
-      setMessage("Busted")
+    const newScore = myScore - Number(input)
+    if (newScore < 0) {
+      setMessage({ message: "Busted!", color: "black" })
       return myScore
-    } else if (roundScore === 0) {
-      setMessage("You win!")
-      // should probably send winnerId to the DB
+    } else if (newScore === 0) {
+      setMessage({ message: "You win!", color: "yellow" })
+      const { data }: any = await axios.put(`${API_URL}/game/win`, {
+        gameId: game.id,
+        winnerId: me.id,
+      })
+      if (!data) setMessage({ message: "Could not submit final score", color: "red" })
       return 0
     } else {
-      setMessage("")
-      await submitScore(roundScore)
-      return roundScore
+      setMessage({ message: "", color: "black" })
+      await submitScore(newScore)
+      return newScore
     }
   }
 
   return (
     <Wrapper>
-      <Message>{message}</Message>
+      <Box minH="1.3rem" color={message.color} fontSize={".8rem"}>
+        {message.message}
+      </Box>
       <Players>
         {canReorder
           ? order.map((user, i) => (
@@ -142,18 +138,18 @@ export default function Game({ users, query, gameProps }: Props) {
                 i={i}
                 updateOrder={updateOrder}
                 updatePosition={updatePosition}
-                user={user}
+                user={user.username}
                 key={user}
               />
             ))
-          : playerOrder?.map((user, i) => (
-              <Deets key={user}>
-                <P isActive={activePlayer === user}>{user}</P>
-                <Score isActive={activePlayer === user}>
-                  {Object.values(game?.players).filter(p => p.username === user)[0].score}
-                </Score>
-              </Deets>
-            ))}
+          : Object.values(game?.players).map(player => {
+              return (
+                <Deets key={player.username}>
+                  <P isActive={activePlayer === player.username}>{player.username}</P>
+                  <Score isActive={activePlayer === player.username}>{player.score}</Score>
+                </Deets>
+              )
+            })}
       </Players>
       {canReorder && <Button onClick={startGame}>start</Button>}
       {activePlayer === me.username && !canReorder && (
@@ -171,6 +167,7 @@ export default function Game({ users, query, gameProps }: Props) {
           </Button>
         </Form>
       )}
+      {message.color === "yellow" && <FireworkShow />}
     </Wrapper>
   )
 }
@@ -183,9 +180,9 @@ export async function getServerSideProps(context) {
   const { data } = await Axios.get(`${API_URL}/game?id=${query.gameId}`, { httpsAgent })
   if (!data) throw "Bad game request"
   const users: any[] = []
-  for (const p of Object.values(data.players)) {
+  for (const p of Object.values(data?.players)) {
     // @ts-ignore
-    users.push(p.username)
+    users.push({ username: p.username, id: p.id, score: p.score })
   }
   return { props: { users, gameProps: data, query } }
 }

@@ -4,20 +4,20 @@ import styled from "styled-components"
 import { GiCutDiamond, GiImperialCrown } from "react-icons/gi"
 
 interface Props {
-  players?: string[]
+  players?: { id: string; username: string }[]
   me: string
-  deselect: (index: number) => void
+  deselect: (id: string) => void
 }
 
 export default function PlayerCards({ players, me, deselect }: Props) {
   return (
     <Wrap>
       {players.map((player, index) => {
-        const isMe = me === player
+        const isMe = me === player.username
         return (
-          <div key={index} onClick={() => deselect(index)}>
-            <Card key={index} isMe={isMe}>
-              <Text>{player}</Text>
+          <div key={index} onClick={() => deselect(player.id)}>
+            <Card isMe={isMe}>
+              <Text>{player.username}</Text>
               {isMe ? <Crown /> : <Diamond />}
             </Card>
           </div>

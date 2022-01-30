@@ -1,0 +1,7 @@
+{
+  "rest-client.environmentVariables": {
+    "Local Dart Env": {
+      "host": "https://api.darts.dev"
+    }
+  }
+}
