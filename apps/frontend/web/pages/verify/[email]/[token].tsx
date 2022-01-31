@@ -1,4 +1,4 @@
-import axios, { API_URL } from "@/services"
+import { axios, API_URL } from "@/services"
 import { AxiosResponse } from "axios"
 import { useRouter } from "next/router"
 import React, { useEffect } from "react"

@@ -1,4 +1,4 @@
-import axios from "@/services"
+import { axios } from "@/services"
 import { useEffect, useState } from "react"
 import { useAtom } from "jotai"
 import { userAtom } from "@/store"

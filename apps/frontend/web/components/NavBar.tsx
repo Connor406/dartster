@@ -1,4 +1,4 @@
-import axios, { API_URL } from "@/services"
+import { axios, API_URL } from "@/services"
 import { useEffect } from "react"
 import { useAtom } from "jotai"
 import { userAtom } from "@/store"
@@ -57,7 +57,7 @@ const NavBar: React.FC = () => {
         </NavLink>
         <NavLink href="/game/new">New Game</NavLink>
         <NavLink href="/stats">Stats</NavLink>
-        {user.gameId && <NavLink href={`/game/${user.game.id}?user=${user.id}`}>Join Game</NavLink>}
+        {user.gameId && <NavLink href={`/game/${user.gameId}`}>Join Game</NavLink>}
       </Box>
       <Box
         display="flex"

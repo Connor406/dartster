@@ -1,10 +1,11 @@
-import axios, { API_URL, socket } from "@/services"
 import Axios from "axios"
 import https from "https"
 import styled from "styled-components"
 import Player from "@/components/Motion/Draggable"
 import FireworkShow from "@/components/Fireworks"
 import Wrapper from "@/components/Wrapper"
+import GameOver from "@/components/GameOverModal"
+import { axios, API_URL, useSockets } from "@/services"
 import { useEffect, useState } from "react"
 import { useAtom } from "jotai"
 import { useAtomValue } from "jotai/utils"
@@ -14,6 +15,8 @@ import { Form, Input } from "@/components/styled"
 import { usePositionReorder } from "@/util/usePositionReorder"
 import { gameAtom } from "@/store/game"
 import { getUserPosition } from "@/util/parse"
+import { useRouter } from "next/router"
+import { gameOverAtom } from "@/store/gameOver"
 
 interface IPlayer {
   [playerX: string]: {
@@ -39,22 +42,19 @@ interface Props {
 }
 
 export default function Game({ users, query, gameProps }: Props) {
-  // me query return value
+  useSockets()
   const me = useAtomValue(userAtom)
   const [game, setGame] = useAtom(gameAtom)
   const [order, updatePosition, updateOrder] = usePositionReorder(users)
   const [message, setMessage] = useState({ message: "", color: "black" })
   const [input, setInput] = useState(0)
+  const gameOver = useAtomValue(gameOverAtom)
 
   const myPosition = getUserPosition(game?.players, me?.username)
   const myScore = game?.players[myPosition]?.score
   const activePlayer = game?.activePlayer
   const canReorder = !game?.started
-
-  socket.on("score", ({ game }) => {
-    setGame(game)
-    console.log({ game })
-  })
+  const router = useRouter()
 
   // TODO: fix jotai query so i don't have to do this
   useEffect(() => {
@@ -65,7 +65,7 @@ export default function Game({ users, query, gameProps }: Props) {
     if (order) {
       const players = {}
       order.map((p, i) => {
-        return (players[i + 1] = { id: p.id, username: p.id, score: myScore })
+        return (players[i + 1] = { id: p.id, username: p.username, score: myScore })
       })
       const body = { id: query.gameId, players }
       const { data }: any = await axios.put(`${API_URL}/game/start`, body)
@@ -111,7 +111,6 @@ export default function Game({ users, query, gameProps }: Props) {
       setMessage({ message: "Busted!", color: "black" })
       return myScore
     } else if (newScore === 0) {
-      setMessage({ message: "You win!", color: "yellow" })
       const { data }: any = await axios.put(`${API_URL}/game/win`, {
         gameId: game.id,
         winnerId: me.id,
@@ -130,6 +129,11 @@ export default function Game({ users, query, gameProps }: Props) {
       <Box minH="1.3rem" color={message.color} fontSize={".8rem"}>
         {message.message}
       </Box>
+      <GameOver
+        isWinner={game.winnerId === me.id}
+        isOpen={gameOver.gameOver}
+        onClose={() => router.push("/")}
+      />
       <Players>
         {canReorder
           ? order.map((user, i) => (
@@ -139,17 +143,15 @@ export default function Game({ users, query, gameProps }: Props) {
                 updateOrder={updateOrder}
                 updatePosition={updatePosition}
                 user={user.username}
-                key={user}
+                key={user.id}
               />
             ))
-          : Object.values(game?.players).map(player => {
-              return (
-                <Deets key={player.username}>
-                  <P isActive={activePlayer === player.username}>{player.username}</P>
-                  <Score isActive={activePlayer === player.username}>{player.score}</Score>
-                </Deets>
-              )
-            })}
+          : Object.values(game?.players).map(player => (
+              <Deets key={player.username}>
+                <P isActive={activePlayer === player.username}>{player.username}</P>
+                <Score isActive={activePlayer === player.username}>{player.score}</Score>
+              </Deets>
+            ))}
       </Players>
       {canReorder && <Button onClick={startGame}>start</Button>}
       {activePlayer === me.username && !canReorder && (
@@ -167,7 +169,7 @@ export default function Game({ users, query, gameProps }: Props) {
           </Button>
         </Form>
       )}
-      {message.color === "yellow" && <FireworkShow />}
+      {gameOver.winner.id === me.id && <FireworkShow />}
     </Wrapper>
   )
 }

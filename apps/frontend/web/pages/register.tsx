@@ -2,7 +2,7 @@ import * as Style from "@/components/styled"
 import { useForm, SubmitHandler } from "react-hook-form"
 import { useState } from "react"
 import { AxiosResponse } from "axios"
-import axios, { API_URL } from "@/services"
+import { axios, API_URL } from "@/services"
 import { useRouter } from "next/router"
 
 interface IFormInput {

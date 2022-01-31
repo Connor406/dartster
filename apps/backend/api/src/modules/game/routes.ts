@@ -101,8 +101,8 @@ const gameRoutes: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
         where: { id },
         data: { players, activePlayer: nextPlayer },
       })
-      fastify.io.emit("score", { status: "OK", game })
-      reply.send({ status: "OK", game })
+      fastify.io.emit("score", { game })
+      reply.send({ game })
     } catch (error) {
       fastify.httpErrors.badRequest(error)
       reply.code(400).send(error)
@@ -116,12 +116,11 @@ const gameRoutes: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
         where: { id: gameId },
         data: { winnerId, activePlayer: null },
       })
-      const loserIds: string[] = []
+      const loserUsernames: string[] = []
       for (const v of Object.values(game.players)) {
         // @ts-ignore
-        loserIds.push(v)
+        loserUsernames.push(v.username)
       }
-      console.log("🚨", loserIds)
       const winner = await fastify.prisma.user.update({
         where: { id: winnerId },
         data: {
@@ -133,18 +132,24 @@ const gameRoutes: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
         select: { id: true, username: true, user_stats: true },
       })
       // update losers
-      const losers = loserIds.map(loser => {
-        return fastify.prisma.user.update({
-          where: { id: loser },
-          data: {
-            gameId: null,
-            user_stats: {
-              update: { losses: { increment: 1 }, points: { decrement: 5 } },
+      await fastify.prisma.$transaction(
+        loserUsernames.map(loser => {
+          return fastify.prisma.user.update({
+            where: { username: loser },
+            data: {
+              gameId: null,
+              user_stats: {
+                update: { losses: { increment: 1 }, points: { decrement: 5 } },
+              },
             },
-          },
+          })
         })
+      )
+      const losers = await fastify.prisma.user.findMany({
+        where: { username: { in: loserUsernames } },
+        select: { id: true, username: true, user_stats: true },
       })
-      await fastify.prisma.$transaction(losers)
+      fastify.io.emit("gameOver", { game, winner, losers })
       reply.send({ game, winner, losers })
     } catch (error) {
       fastify.httpErrors.badRequest(error)
