@@ -15,12 +15,9 @@ const app: FastifyPluginAsync<AppOptions> = async (fastify, opts): Promise<void>
   void fastify.register(import("fastify-cors"), {
     strictPreflight: false,
     credentials: true,
-    origin: [
-      "https://dartster-web.onrender.com",
-      "https://dartster-web.onrender.com/",
-      "onrender.com",
-    ],
+    origin: "*",
     exposedHeaders: "Content-Disposition",
+    methods: ["GET", "PUT", "POST", "DELETE"],
   })
   void fastify.register(fastifyIO, {
     cors: {
