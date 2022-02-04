@@ -15,9 +15,8 @@ const app: FastifyPluginAsync<AppOptions> = async (fastify, opts): Promise<void>
   void fastify.register(import("fastify-cors"), {
     strictPreflight: false,
     credentials: true,
-    origin: "*",
+    origin: true,
     exposedHeaders: "Content-Disposition",
-    methods: ["GET", "PUT", "POST", "DELETE", "OPTIONS"],
   })
   void fastify.register(fastifyIO, {
     cors: {
