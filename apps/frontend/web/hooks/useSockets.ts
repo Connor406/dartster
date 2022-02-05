@@ -1,7 +1,4 @@
-import { userAtom } from "@/store"
-import { gameAtom } from "@/store/game"
-import { gameOverAtom } from "@/store/gameOver"
-import { inviteAtom } from "@/store/invite"
+import { inviteAtom, gameOverAtom, userAtom, gameAtom } from "@/store"
 import { useAtomValue, useUpdateAtom } from "jotai/utils"
 import { io } from "socket.io-client"
 
@@ -17,6 +14,7 @@ export function useGameSockets() {
 
   socket.on("gameOver", ({ game, winner, losers }) => {
     setGameOver({ gameOver: true, game, winner, losers })
+    console.log({ losers })
     setGame(game)
   })
 }

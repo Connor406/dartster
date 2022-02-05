@@ -1,7 +1,4 @@
-import { userAtom } from "@/store"
-import { gameAtom } from "@/store/game"
-import { gameOverAtom } from "@/store/gameOver"
-import { getUserPositionById } from "@/util/parse"
+import { userAtom, gameOverAtom } from "@/store"
 import { Button, Modal, ModalBody, ModalContent, ModalHeader, ModalOverlay } from "@chakra-ui/react"
 import { useAtomValue } from "jotai/utils"
 
@@ -12,21 +9,22 @@ interface Props {
 }
 
 function GameOver({ isOpen, onClose, isWinner }: Props) {
-  const me = useAtomValue(userAtom)
+  const _me = useAtomValue(userAtom)
   const gameOver = useAtomValue(gameOverAtom)
-  const winner = gameOver.winner
+  const { winner } = gameOver
+  const me = isWinner ? winner : gameOver.losers.find(p => p.id === _me.id)
 
   const messages = {
     winner: {
       header: "Congrats on a hard fought victory! 👏",
-      body: `You earned 100 points, putting you at ${me.user_stats.points}!
-				This puts you at ${me.user_stats.wins} wins and ${me.user_stats.losses} losses. Enjoy the win!
+      body: `You earned 100 points, putting you at ${me?.user_stats?.points}!
+				This puts you at ${me?.user_stats?.wins} wins and ${me?.user_stats?.losses} losses. Enjoy the win!
 			`,
     },
     loser: {
       header: `You fought hard, but ${winner?.username} is the winner! 👏`,
-      body: `You lost 5 points, putting you at ${me.user_stats.points}!
-				This puts you at ${me.user_stats.wins} wins and ${me.user_stats.losses} losses. Keep your head up and get 'em next time!
+      body: `You lost 5 points, putting you at ${me?.user_stats?.points}!
+				This puts you at ${me?.user_stats?.wins} wins and ${me?.user_stats?.losses} losses. Keep your head up and get 'em next time!
 			`,
     },
   }

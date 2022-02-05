@@ -1,25 +1,25 @@
+import Wrapper from "@/components/Wrapper"
+import PlayerCards from "@/components/Motion/PlayerCard"
+import styled from "styled-components"
 import { axios, API_URL } from "@/services"
 import { useState, useEffect } from "react"
 import { useAtom } from "jotai"
 import { userAtom } from "@/store"
 import { useForm } from "react-hook-form"
-import styled from "styled-components"
 import { Form, Input } from "@/components/styled"
 import { Button } from "@chakra-ui/react"
-import Wrapper from "@/components/Wrapper"
-import PlayerCards from "@/components/Motion/PlayerCard"
 import { useRouter } from "next/router"
+import { useAtomValue } from "jotai/utils"
 
 export default function NewGame() {
   // me query return value
-  const [user, setUser] = useAtom(userAtom)
+  const me = useAtomValue(userAtom)
   // value of search input
   const [value, setValue] = useState("")
   // results from searching players
   const [result, setResult] = useState([{ username: "", id: "1" }])
   // array of players
   const [players, setPlayers] = useState([{ id: "1", username: "" }])
-  console.log(players)
   // form shit
   const { register, handleSubmit } = useForm()
   const onSubmit = data => createNewGame({ startingScore: Number(data.startingScore), players })
@@ -44,8 +44,8 @@ export default function NewGame() {
   }, [value])
   // sets current user to first player
   useEffect(() => {
-    setPlayers([{ id: user.id, username: user.username }])
-  }, [user])
+    setPlayers([{ id: me.id, username: me.username }])
+  }, [me])
 
   function selectUser(user) {
     setPlayers([...players, user])
@@ -80,7 +80,7 @@ export default function NewGame() {
   return (
     <Wrapper size="small">
       <Title>New game</Title>
-      <PlayerCards players={players} me={user.username} deselect={deselectUser} />
+      <PlayerCards players={players} me={me.username} deselect={deselectUser} />
       <Form onSubmit={handleSubmit(onSubmit)}>
         <Input
           placeholder="search players by username"

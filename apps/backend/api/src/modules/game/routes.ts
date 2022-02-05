@@ -118,9 +118,10 @@ const gameRoutes: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
         data: { winnerId, activePlayer: null },
       })
       const loserUsernames: string[] = []
-      for (const v of Object.values(game.players)) {
-        // @ts-ignore
-        loserUsernames.push(v.username)
+      for (const v of Object.values(game.players) as any) {
+        if (v.id !== winnerId) {
+          loserUsernames.push(v.username)
+        }
       }
       const winner = await fastify.prisma.user.update({
         where: { id: winnerId },
@@ -153,8 +154,17 @@ const gameRoutes: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
       fastify.io.emit("gameOver", { game, winner, losers })
       reply.send({ game, winner, losers })
     } catch (error) {
-      fastify.httpErrors.badRequest(error)
-      reply.code(400).send(error)
+      reply.send(fastify.httpErrors.badRequest(error))
+    }
+  })
+
+  fastify.delete("/", {}, async function (request: GetGameRequest, reply: FastifyReply) {
+    try {
+      const { id } = request.query
+      await fastify.prisma.game.delete({ where: { id } })
+      reply.send("OK")
+    } catch (error) {
+      reply.send(fastify.httpErrors.badRequest(error))
     }
   })
 }

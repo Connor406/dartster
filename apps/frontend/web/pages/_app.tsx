@@ -3,7 +3,7 @@ import NavBar from "@/components/NavBar"
 import theme from "@/theme"
 import { AppProps } from "next/app"
 import { ChakraProvider } from "@chakra-ui/react"
-import { useGlobalSockets } from "@/services"
+import { useGlobalSockets } from "@/hooks/useSockets"
 
 function CustomApp({ Component, pageProps }: AppProps) {
   useGlobalSockets()

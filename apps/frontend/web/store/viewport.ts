@@ -1,9 +1,9 @@
 import { atom } from "jotai"
 
-const inviteAtom = atom({
+const viewportAtom = atom({
   isInvited: false,
   players: {},
   gameId: 0,
 })
 
-export { inviteAtom }
+export { viewportAtom }

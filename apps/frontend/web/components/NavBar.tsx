@@ -1,25 +1,25 @@
+import InvitedModal from "./InvitedModal"
+import OverwriteModal from "./OverwriteGame"
 import { axios, API_URL } from "@/services"
 import { useEffect } from "react"
 import { useAtom } from "jotai"
-import { userAtom } from "@/store"
+import { overwriteAtom, userAtom } from "@/store"
 import { Box, LinkProps } from "@chakra-ui/layout"
 import { Link } from "@chakra-ui/react"
 import { useRouter } from "next/router"
-import { useAtomValue } from "jotai/utils"
-import { inviteAtom } from "@/store/invite"
-import InvitedModal from "./InvitedModal"
+import { useUpdateAtom } from "jotai/utils"
 
 const NavBar: React.FC = () => {
   const router = useRouter()
   const page = router.pathname
-  const [user, setUser] = useAtom(userAtom)
-  const isInvited = useAtomValue(inviteAtom)
+  const [me, setMe] = useAtom(userAtom)
+  const setOverwriteOpen = useUpdateAtom(overwriteAtom)
 
   async function meQuery() {
     try {
       const { data }: any = await axios.get(`${API_URL}/user/me`, { withCredentials: true })
       if (data.user) {
-        setUser(data.user)
+        setMe(data.user)
       }
     } catch (error) {
       if (error) console.error(error)
@@ -59,9 +59,16 @@ const NavBar: React.FC = () => {
         <NavLink mx="1rem" href="/">
           Home
         </NavLink>
-        <NavLink href="/game/new">New Game</NavLink>
+        <NavLink
+          as="button"
+          onClick={() => {
+            me.gameId && setOverwriteOpen(true)
+          }}
+        >
+          New Game
+        </NavLink>
         <NavLink href="/stats">Stats</NavLink>
-        {user.gameId && <NavLink href={`/game/${user.gameId}`}>Join Game</NavLink>}
+        {me.gameId && <NavLink href={`/game/${me.gameId}`}>Join Game</NavLink>}
       </Box>
       <Box
         display="flex"
@@ -72,10 +79,10 @@ const NavBar: React.FC = () => {
         h="100%"
         color="white"
       >
-        {user.username ? (
+        {me.username ? (
           <Box h="100%" display="flex" alignItems="flex-start">
             <NavLink href="/">
-              {user.username} 🎖{user.user_stats.points}
+              {me.username} 🎖{me.user_stats.points}
             </NavLink>
             <NavLink href="/" onClick={e => logout(e)}>
               Logout
@@ -96,6 +103,7 @@ const NavBar: React.FC = () => {
         )}
       </Box>
       <InvitedModal />
+      <OverwriteModal />
     </Box>
   )
 }
