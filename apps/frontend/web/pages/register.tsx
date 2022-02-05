@@ -1,9 +1,10 @@
-import * as Style from "@/components/styled"
 import { useForm, SubmitHandler } from "react-hook-form"
 import { useState } from "react"
 import { AxiosResponse } from "axios"
 import { axios, API_URL } from "@/services"
 import { useRouter } from "next/router"
+import { Box, Button, FormControl, FormHelperText, Input, Text } from "@chakra-ui/react"
+import Wrapper from "@/components/Wrapper"
 
 interface IFormInput {
   email: string
@@ -40,34 +41,38 @@ export default function Register() {
   console.log(message)
 
   return (
-    <div style={{ marginTop: "8rem" }}>
-      <Style.Form onSubmit={handleSubmit(onSubmit)}>
-        <Style.NameBox>
-          <div>
-            <Style.Input
-              $name={errors["firstName"]}
-              placeholder="first name"
-              {...register("firstName", {
-                required: true,
-              })}
-            />
-          </div>
-          <Style.Input
+    <Wrapper size="small">
+      <Text fontSize="3rem" fontFamily="Lansdowne Slanted" color="gold">
+        Create an account
+      </Text>
+      <FormControl as="form" onSubmit={handleSubmit(onSubmit)} h="80vh">
+        <Box display="flex" width="100%" margin="0px" padding="0px" my="1rem">
+          <Input
+            mr="1rem"
+            $name={errors["firstName"]}
+            placeholder="first name"
+            {...register("firstName", {
+              required: true,
+            })}
+          />
+          <Input
             $name={errors["lastName"]}
             placeholder="last name"
             {...register("lastName", {
               required: true,
             })}
           />
-        </Style.NameBox>
-        <Style.Input
+        </Box>
+        <Input
+          mb="1rem"
           $name={errors["username"]}
           placeholder="username"
           {...register("username", {
             required: true,
           })}
         />
-        <Style.Input
+        <Input
+          mb="1rem"
           $name={errors["email"]}
           placeholder="email"
           type="email"
@@ -76,25 +81,26 @@ export default function Register() {
             required: true,
           })}
         />
-        <Style.Input
+        <Input
+          mb="1rem"
           $name={errors["password"]}
           placeholder="password"
           type="password"
           {...register("password", {
-            validate: (val: string) => val.length >= 5 || "Password must be at least 5 characters",
+            validate: (val: string) => val.length >= 8 || "Password must be at least 8 characters",
             required: true,
           })}
         />
-        <Style.Button type="submit" />
-        {userError && <Style.Error>{userError}</Style.Error>}
+        <Button type="submit" onClick={handleSubmit(onSubmit)}>
+          Sign Up
+        </Button>
+        {userError && <FormHelperText color="red">{userError}</FormHelperText>}
         {message && (
-          <Style.Error>
-            {message[0]?.type && message[0]?.type !== "validate"
-              ? message[0]?.type
-              : message[0]?.message ?? ""}
-          </Style.Error>
+          <FormHelperText color="red">
+            {message[0]?.type !== "validate" ? message[0]?.type : message[0]?.message ?? ""}
+          </FormHelperText>
         )}
-      </Style.Form>
-    </div>
+      </FormControl>
+    </Wrapper>
   )
 }

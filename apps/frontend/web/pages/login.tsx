@@ -1,6 +1,6 @@
-import { useState } from "react"
+import Wrapper from "@/components/Wrapper"
+import { Button, FormControl, Input, Text } from "@chakra-ui/react"
 import { axios, API_URL } from "@/services"
-import * as Style from "@/components/styled"
 import { useForm, SubmitHandler } from "react-hook-form"
 import { useRouter } from "next/router"
 
@@ -26,16 +26,21 @@ export default function Login() {
   // TODO: add 'forgot password' and 'change password' buttons
 
   return (
-    <Style.Wrap>
-      <Style.Form onSubmit={handleSubmit(onSubmit)}>
-        <Style.Input
+    <Wrapper size="small">
+      <Text fontSize="3rem" fontFamily="Lansdowne Slanted" color="gold">
+        Welcome back
+      </Text>
+      <FormControl as="form" onSubmit={handleSubmit(onSubmit)}>
+        <Input
+          mb="1rem"
           $name={errors["username"]}
           placeholder="username"
           {...register("username", {
             required: true,
           })}
         />
-        <Style.Input
+        <Input
+          mb="1rem"
           $name={errors["password"]}
           placeholder="password"
           type="password"
@@ -44,8 +49,10 @@ export default function Login() {
             required: true,
           })}
         />
-        <Style.Button type="submit" />
-      </Style.Form>
-    </Style.Wrap>
+        <Button type="submit" onClick={handleSubmit(onSubmit)}>
+          Login
+        </Button>
+      </FormControl>
+    </Wrapper>
   )
 }

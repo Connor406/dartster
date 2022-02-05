@@ -60,19 +60,19 @@ const NavBar: React.FC = () => {
         justifyContent="flex-start"
         color="white"
       >
-        <NavLink mx="1rem" href="/">
+        <Link mx="1rem" href="/">
           Home
-        </NavLink>
-        <NavLink
+        </Link>
+        <Link
           as="button"
           onClick={() => {
             me?.gameId ? setOverwriteOpen(true) : router.push(auth("/game/new"))
           }}
         >
           New Game
-        </NavLink>
-        <NavLink href={auth("/stats")}>Stats</NavLink>
-        {me.gameId && <NavLink href={`/game/${me.gameId}`}>Join Game</NavLink>}
+        </Link>
+        <Link href={auth("/stats")}>Stats</Link>
+        {me.gameId && <Link href={`/game/${me.gameId}`}>Join Game</Link>}
       </Box>
       <Box
         display="flex"
@@ -85,12 +85,12 @@ const NavBar: React.FC = () => {
       >
         {me.username ? (
           <Box h="100%" display="flex" alignItems="flex-start">
-            <NavLink href="/">
+            <Link href="/">
               {me.username} 🎖{me.user_stats.points}
-            </NavLink>
-            <NavLink href="/" onClick={e => logout(e)}>
+            </Link>
+            <Link href="/" onClick={e => logout(e)}>
               Logout
-            </NavLink>
+            </Link>
           </Box>
         ) : (
           <Box
@@ -101,8 +101,8 @@ const NavBar: React.FC = () => {
             w="60vw"
             h="100%"
           >
-            <NavLink href="/login">SignIn</NavLink>
-            <NavLink href="/register">SignUp</NavLink>
+            <Link href="/login">SignIn</Link>
+            <Link href="/register">SignUp</Link>
           </Box>
         )}
       </Box>
@@ -113,19 +113,3 @@ const NavBar: React.FC = () => {
 }
 
 export default NavBar
-
-const NavLink = (props: LinkProps) => (
-  <Link
-    pt="1rem"
-    mr="1rem"
-    borderTop="5px solid transparent"
-    {...props}
-    _hover={{
-      color: "yellow",
-      borderTop: "5px solid #F1B24A",
-    }}
-    _visited={{
-      color: "inherit",
-    }}
-  />
-)

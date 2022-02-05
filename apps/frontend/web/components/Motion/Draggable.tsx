@@ -13,7 +13,7 @@ export default function Player({ i, user, updatePosition, updateOrder, reorder }
   return (
     <Li style={{ zIndex: isDragging ? 3 : 1 }}>
       <MotionBox
-        id={user}
+        id={user.id}
         padding="2em"
         bg="white"
         color="green"

@@ -3,11 +3,9 @@ import PlayerCards from "@/components/Motion/PlayerCard"
 import styled from "styled-components"
 import { axios, API_URL } from "@/services"
 import { useState, useEffect } from "react"
-import { useAtom } from "jotai"
 import { userAtom } from "@/store"
 import { useForm } from "react-hook-form"
-import { Form, Input } from "@/components/styled"
-import { Button } from "@chakra-ui/react"
+import { Box, Button, FormControl, Input, Link } from "@chakra-ui/react"
 import { useRouter } from "next/router"
 import { useAtomValue } from "jotai/utils"
 
@@ -27,7 +25,7 @@ export default function NewGame() {
   const router = useRouter()
 
   async function searchUsers(value) {
-    if (value && value.length > 1) {
+    if (value && value.length > 2) {
       const { data } = await axios.get(`${API_URL}/user?username=${value}`)
       if (data) {
         setResult(data as any)
@@ -81,25 +79,32 @@ export default function NewGame() {
     <Wrapper size="small">
       <Title>New game</Title>
       <PlayerCards players={players} me={me.username} deselect={deselectUser} />
-      <Form onSubmit={handleSubmit(onSubmit)}>
+      <FormControl as="form" onSubmit={handleSubmit(onSubmit)}>
         <Input
+          mb="1rem"
           placeholder="search players by username"
           onChange={e => {
             setValue(e.target.value)
           }}
           value={value}
         />
-        <ResultWrap>
+        <Box display="flex" w="100%" justifyContent="center" h="3.5rem">
           {result.map((user, i) => {
             return (
               user.username && (
-                <Result style={{ listStyleType: "none" }} key={i} onClick={() => selectUser(user)}>
+                <Button
+                  bg="white"
+                  color="lightGreen"
+                  mx=".5rem"
+                  key={i}
+                  onClick={() => selectUser(user)}
+                >
                   {user.username}
-                </Result>
+                </Button>
               )
             )
           })}
-        </ResultWrap>
+        </Box>
         <Select {...register("startingScore")}>
           <option value="101">101</option>
           <option value="201">201</option>
@@ -107,10 +112,10 @@ export default function NewGame() {
           <option value="401">401</option>
           <option value="501">501</option>
         </Select>
-        <Button type="submit" onSubmit={onSubmit}>
+        <Button type="submit" onClick={onSubmit}>
           Start
         </Button>
-      </Form>
+      </FormControl>
     </Wrapper>
   )
 }

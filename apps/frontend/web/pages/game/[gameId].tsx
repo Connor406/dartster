@@ -11,8 +11,7 @@ import { useEffect, useState } from "react"
 import { useAtom } from "jotai"
 import { useAtomValue } from "jotai/utils"
 import { userAtom, gameAtom, gameOverAtom } from "@/store"
-import { Box, Button } from "@chakra-ui/react"
-import { Form, Input } from "@/components/styled"
+import { Box, Button, FormControl, Input } from "@chakra-ui/react"
 import { usePositionReorder } from "@/util/usePositionReorder"
 import { getUserPosition } from "@/util/parse"
 import { useRouter } from "next/router"
@@ -154,19 +153,19 @@ export default function Game({ users, query, gameProps }: Props) {
       </Players>
       {canReorder && <Button onClick={startGame}>start</Button>}
       {activePlayer === me.username && !canReorder && (
-        <Form onSubmit={e => calculateScore(e)}>
+        <FormControl as="form" onSubmit={e => calculateScore(e)}>
           <Input
             value={input}
             placeholder="enter your score"
             onChange={e => {
               e.preventDefault()
-              setInput(e.target.value)
+              setInput(e.target.value as any)
             }}
           ></Input>
-          <Button type="submit" variant="sticker">
+          <Button type="submit" onClick={e => calculateScore(e)}>
             Score
           </Button>
-        </Form>
+        </FormControl>
       )}
       {gameOver.winner.id === me.id && <FireworkShow />}
     </Wrapper>

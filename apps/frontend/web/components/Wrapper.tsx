@@ -30,8 +30,8 @@ export default function Wrapper({
         bg={bgColor ?? "white"}
         textAlign="center"
         size={size === "small" ? "20%" : "10%"}
-        bgColor={bgColor}
         p="4rem 2rem"
+        px={size === "small" ? "30%" : "10%"}
       >
         {children}
       </Box>

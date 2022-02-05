@@ -34,6 +34,9 @@ const theme = extendTheme({
           boxShadow: "xs",
           transform: "scale(0.98)",
         },
+        _focus: {
+          boxShadow: "none",
+        },
       },
       sizes: {
         xl: {
@@ -43,6 +46,42 @@ const theme = extendTheme({
           px: 8,
         },
       },
+      variants: {},
+    },
+    Link: {
+      baseStyle: {
+        pt: "1rem",
+        mr: "1rem",
+        borderTop: "5px solid transparent",
+        _hover: {
+          color: "yellow",
+          borderTop: "5px solid #F1B24A",
+          borderBottom: "none",
+          textDecoration: "none",
+        },
+        _visited: {
+          color: "inherit",
+        },
+        _focus: {
+          outline: "none",
+          boxShadow: "none",
+        },
+      },
+      sizes: {
+        xl: {
+          h: 14,
+          minW: 14,
+          fontSize: "2xl",
+          px: 8,
+        },
+      },
+      variants: {},
+    },
+    Input: {
+      baseStyle: {
+        mb: "1rem",
+      },
+      sizes: {},
       variants: {},
     },
   },
