@@ -22,12 +22,12 @@ export function useGameSockets() {
 export function useGlobalSockets() {
   const me = useAtomValue(userAtom)
   const setIsInvited = useUpdateAtom(inviteAtom)
-  socket.on("newGame", ({ players, gameId }) => {
-    if (players[1].username === me.username) return
+  socket.on("newGame", ({ players, gameId, captain }) => {
+    if (captain === me.username) return
     Object.values(players).forEach((p: any) => {
       if (p.username === me.username) {
         console.log("invited!")
-        setIsInvited({ isInvited: true, players, gameId })
+        setIsInvited({ isInvited: true, players, gameId, captain })
       }
     })
   })

@@ -10,16 +10,16 @@ function InvitedModal() {
   return (
     <Modal
       isOpen={invite.isInvited}
-      onClose={() => setInvite({ isInvited: false, gameId: 0, players: {} })}
+      onClose={() => setInvite({ isInvited: false, gameId: 0, players: {}, captain: "" })}
     >
       <ModalOverlay />
       <ModalContent display="flex" alignItems="center">
         <ModalHeader>{`You're invited! 🎉`}</ModalHeader>
-        <ModalBody>{`${invite.players[1]?.username} invited you to play.`}</ModalBody>
+        <ModalBody>{`${invite.captain} invited you to play.`}</ModalBody>
         <Button
           onClick={() => {
             router.push(`/game/${invite.gameId}`)
-            setInvite({ isInvited: false, gameId: 0, players: {} })
+            setInvite({ isInvited: false, gameId: 0, players: {}, captain: "" })
           }}
           mb="1rem"
         >
