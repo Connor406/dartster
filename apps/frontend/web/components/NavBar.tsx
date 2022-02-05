@@ -36,6 +36,10 @@ const NavBar: React.FC = () => {
     meQuery()
   }, [router.pathname])
 
+  function auth(path: string) {
+    return me.id ? path : "/login"
+  }
+
   return (
     <Box
       h="4rem"
@@ -62,12 +66,12 @@ const NavBar: React.FC = () => {
         <NavLink
           as="button"
           onClick={() => {
-            me.gameId && setOverwriteOpen(true)
+            me?.gameId ? setOverwriteOpen(true) : router.push(auth("/game/new"))
           }}
         >
           New Game
         </NavLink>
-        <NavLink href="/stats">Stats</NavLink>
+        <NavLink href={auth("/stats")}>Stats</NavLink>
         {me.gameId && <NavLink href={`/game/${me.gameId}`}>Join Game</NavLink>}
       </Box>
       <Box
