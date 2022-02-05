@@ -5,7 +5,7 @@ import Player from "@/components/Motion/Draggable"
 import FireworkShow from "@/components/Fireworks"
 import Wrapper from "@/components/Wrapper"
 import GameOver from "@/components/GameOverModal"
-import { axios, API_URL, useSockets } from "@/services"
+import { axios, API_URL, useGameSockets } from "@/services"
 import { useEffect, useState } from "react"
 import { useAtom } from "jotai"
 import { useAtomValue } from "jotai/utils"
@@ -42,7 +42,7 @@ interface Props {
 }
 
 export default function Game({ users, query, gameProps }: Props) {
-  useSockets()
+  useGameSockets()
   const me = useAtomValue(userAtom)
   const [game, setGame] = useAtom(gameAtom)
   const [order, updatePosition, updateOrder] = usePositionReorder(users)

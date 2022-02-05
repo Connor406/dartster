@@ -49,7 +49,17 @@ export function Index() {
         fontFamily="Lansdowne Slanted"
         textShadow="8px 8px 10px #164A41"
       >
-        Dartster
+        Dart Mule
+      </MotionText>
+      <MotionText
+        initial={{ opacity: 0, scale: 3 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5, delay: 0.5, type: "spring" }}
+        color="white"
+        fontFamily="sans-serif"
+        textShadow="8px 8px 10px #164A41"
+      >
+        A work in progress...
       </MotionText>
       <Box
         w="50vw"

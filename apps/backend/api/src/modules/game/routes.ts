@@ -88,6 +88,7 @@ const gameRoutes: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
         where: { id },
         data: { activePlayer, players, started: true },
       })
+      fastify.io.emit("newGame", { players, gameId: game.id })
       reply.send(game)
     } catch (error) {
       fastify.httpErrors.badRequest(error)

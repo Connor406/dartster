@@ -5,11 +5,15 @@ import { userAtom } from "@/store"
 import { Box, LinkProps } from "@chakra-ui/layout"
 import { Link } from "@chakra-ui/react"
 import { useRouter } from "next/router"
+import { useAtomValue } from "jotai/utils"
+import { inviteAtom } from "@/store/invite"
+import InvitedModal from "./InvitedModal"
 
 const NavBar: React.FC = () => {
   const router = useRouter()
   const page = router.pathname
   const [user, setUser] = useAtom(userAtom)
+  const isInvited = useAtomValue(inviteAtom)
 
   async function meQuery() {
     try {
@@ -91,6 +95,7 @@ const NavBar: React.FC = () => {
           </Box>
         )}
       </Box>
+      <InvitedModal />
     </Box>
   )
 }
