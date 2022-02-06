@@ -1,9 +1,8 @@
-import { useState } from "react"
+import Wrapper from "@/components/Wrapper"
 import { axios, API_URL } from "@/services"
-import * as Style from "@/components/styled"
 import { useForm, SubmitHandler } from "react-hook-form"
 import { useRouter } from "next/router"
-import { Button } from "@chakra-ui/react"
+import { Button, FormControl, Input } from "@chakra-ui/react"
 
 interface Form {
   oldPassword: string
@@ -25,9 +24,9 @@ export default function ChangePassword() {
   }
 
   return (
-    <Style.Wrap>
-      <Style.Form onSubmit={handleSubmit(onSubmit)}>
-        <Style.Input
+    <Wrapper>
+      <FormControl onSubmit={handleSubmit(onSubmit)}>
+        <Input
           $name={errors["username"]}
           placeholder="old password"
           type="password"
@@ -35,7 +34,7 @@ export default function ChangePassword() {
             required: true,
           })}
         />
-        <Style.Input
+        <Input
           $name={errors["password"]}
           placeholder="new password"
           type="password"
@@ -52,7 +51,7 @@ export default function ChangePassword() {
               : message[0]?.message ?? ""}
           </Style.Error>
         )} */}
-      </Style.Form>
-    </Style.Wrap>
+      </FormControl>
+    </Wrapper>
   )
 }
