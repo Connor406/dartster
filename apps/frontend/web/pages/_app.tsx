@@ -10,7 +10,7 @@ function CustomApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>
-        <title>Welcome to dart-web!</title>
+        <title>Dart Mule. The best damn dart score keeping app in the World.</title>
       </Head>
       <div>
         <ChakraProvider theme={theme}>
