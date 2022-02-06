@@ -7,21 +7,20 @@ const Fonts = () => (
       /* latin */
       @font-face {
         font-family: "Comodo";
-        src: url("./public/ComodoVintage.otf");
+        src: url("/fonts/ComodoVintage.otf");
       }
-      /* latin */
       @font-face {
-        font-family: "Logawa";
-        src: url("web/src/public/Logawa.otf");
+        font-family: "Sanpaullo";
+        src: url("web/public/fonts/Sanpaullo.otf");
       }
       /* latin */
       @font-face {
         font-family: "Lansdowne";
-        src: url("web/src/public/Lansdowne.ttf");
+        src: url("/fonts/Lansdowne.ttf");
       }
       @font-face {
         font-family: "Lansdowne Slanted";
-        src: url("web/src/public/Lansdowne Slanted.otf")
+        src: url("/fonts/Lansdowne Slanted.otf")
       }
   `}
   />

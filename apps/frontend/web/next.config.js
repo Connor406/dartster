@@ -6,6 +6,7 @@ const nextConfig = {
     NEXT_PUBLIC_DART_ENV: process.env.DART_ENV,
     NEXT_PUBLIC_API_URL: process.env.API_URL,
   },
+  enableSvg: true,
   webpack(config, { isServer }) {
     if (!isServer) {
       config.resolve.fallback.fs = false
