@@ -1,3 +1,4 @@
+import { UseResponsiveCheck } from "@/hooks"
 import { Box } from "@chakra-ui/react"
 
 type WrapperVariant = "small" | "regular"
@@ -17,6 +18,7 @@ export default function Wrapper({
   color,
   bgPic,
 }: WrapperProps) {
+  const { isMobile } = UseResponsiveCheck()
   return (
     <Box
       color={color ?? "black"}
@@ -29,9 +31,8 @@ export default function Wrapper({
         w="100vw"
         bg={bgColor ?? "white"}
         textAlign="center"
-        size={size === "small" ? "20%" : "10%"}
         p="4rem 2rem"
-        px={size === "small" ? "30%" : "10%"}
+        px={size === "small" && !isMobile ? "30%" : "10%"}
       >
         {children}
       </Box>

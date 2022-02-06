@@ -4,8 +4,8 @@ import styled from "styled-components"
 import { axios, API_URL } from "@/services"
 import { useState, useEffect } from "react"
 import { userAtom } from "@/store"
-import { useForm } from "react-hook-form"
-import { Box, Button, FormControl, Input, Link } from "@chakra-ui/react"
+import { SubmitHandler, useForm } from "react-hook-form"
+import { Box, Button, FormControl, Input, Text, Select } from "@chakra-ui/react"
 import { useRouter } from "next/router"
 import { useAtomValue } from "jotai/utils"
 
@@ -20,7 +20,9 @@ export default function NewGame() {
   const [players, setPlayers] = useState([{ id: "1", username: "" }])
   // form shit
   const { register, handleSubmit } = useForm()
-  const onSubmit = data => createNewGame({ startingScore: Number(data.startingScore), players })
+  const onSubmit: SubmitHandler<{ startingScore: string | number }> = async data => {
+    await createNewGame({ startingScore: Number(data.startingScore), players })
+  }
 
   const router = useRouter()
 
@@ -77,7 +79,9 @@ export default function NewGame() {
 
   return (
     <Wrapper size="small">
-      <Title>New game</Title>
+      <Text fontSize="3rem" fontFamily="Lansdowne Slanted" color="gold">
+        New game
+      </Text>
       <PlayerCards players={players} me={me.username} deselect={deselectUser} />
       <FormControl as="form" onSubmit={handleSubmit(onSubmit)}>
         <Input
@@ -94,10 +98,11 @@ export default function NewGame() {
               user.username && (
                 <Button
                   bg="white"
-                  color="lightGreen"
+                  color="gold"
                   mx=".5rem"
                   key={i}
                   onClick={() => selectUser(user)}
+                  _hover={{ color: "green" }}
                 >
                   {user.username}
                 </Button>
@@ -105,32 +110,17 @@ export default function NewGame() {
             )
           })}
         </Box>
-        <Select {...register("startingScore")}>
-          <option value="101">101</option>
-          <option value="201">201</option>
-          <option value="301">301</option>
-          <option value="401">401</option>
-          <option value="501">501</option>
-        </Select>
-        <Button type="submit" onClick={onSubmit}>
-          Start
-        </Button>
+        <Box display="flex" flexWrap="wrap" w="100%" minW="300px" justifyContent="space-evenly">
+          <Select as="select" w="30%" placeholder="Score" {...register("startingScore")}>
+            <option value="101">101</option>
+            <option value="201">201</option>
+            <option value="301">301</option>
+            <option value="401">401</option>
+            <option value="501">501</option>
+          </Select>
+          <Button type="submit">Start</Button>
+        </Box>
       </FormControl>
     </Wrapper>
   )
 }
-
-const Select = styled.select`
-  margin: 1rem;
-`
-
-const ResultWrap = styled.ul`
-  min-height: 2rem;
-`
-const Result = styled.button`
-  margin: 0px 1rem;
-`
-
-const Title = styled.h1`
-  margin: 0;
-`

@@ -1,5 +1,9 @@
 import { motion } from "framer-motion"
 import { Box, Text } from "@chakra-ui/react"
+import { UseResponsiveCheck } from "@/hooks"
+
+const MotionBox = motion(Box)
+const MotionText = motion(Text)
 
 const colors = {
   green: "rgba(77, 119, 78, 1)",
@@ -23,10 +27,9 @@ const layer1 = {
   },
 }
 
-const MotionBox = motion(Box)
-const MotionText = motion(Text)
-
 export function Index() {
+  const { isMobile, isTablet } = UseResponsiveCheck()
+
   return (
     <MotionBox
       p="4rem 2rem"
@@ -41,13 +44,16 @@ export function Index() {
       }}
     >
       <MotionText
+        position="relative"
+        zIndex="2"
         initial={{ x: -700, scale: 3 }}
         animate={{ x: 0, scale: 1 }}
         transition={{ duration: 0.5, type: "spring" }}
         color="white"
-        fontSize="11rem"
+        fontSize={isMobile ? "8rem" : "11rem"}
         fontFamily="Lansdowne Slanted"
         textShadow="8px 8px 10px #164A41"
+        lineHeight={isMobile && "7rem"}
       >
         Dart Mule
       </MotionText>
@@ -61,16 +67,19 @@ export function Index() {
       >
         A work in progress...
       </MotionText>
-      <Box
-        w="50vw"
-        h="calc(100vh - 8rem)"
-        borderTopLeftRadius="40vw"
-        boxShadow="2xl"
-        bg="lightGreen"
-        pos="absolute"
-        right="0px"
-        top="8rem"
-      />
+      {!isMobile && (
+        <Box
+          zIndex="1"
+          w="50vw"
+          h="calc(100vh - 8rem)"
+          borderTopLeftRadius="40vw"
+          boxShadow="2xl"
+          bg="lightGreen"
+          pos="absolute"
+          right="0px"
+          top="8rem"
+        />
+      )}
     </MotionBox>
   )
 }

@@ -8,5 +8,6 @@ const inviteAtom = atom({
 })
 
 const overwriteAtom = atom(false)
+const mobileNavAtom = atom(false)
 
-export { inviteAtom, overwriteAtom }
+export { inviteAtom, overwriteAtom, mobileNavAtom }
