@@ -7,7 +7,7 @@ const MotionText = motion(Text)
 
 export function Index() {
   return (
-    <Box h="100vh" w="100vw" textAlign="center">
+    <Box minH="100vh" minW="100vw" textAlign="center">
       <LandingTriangle />
       <Flex h="50vh" w="100vw" justifyContent="center" alignItems="flex-end" textAlign="center">
         <Logo />
