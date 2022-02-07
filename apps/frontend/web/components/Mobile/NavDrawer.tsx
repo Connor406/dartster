@@ -40,19 +40,21 @@ export const StyledDrawer: React.FC<DrawerProps> = ({ onClose, isOpen, onMenuClo
   return (
     <Drawer placement="right" onClose={onClose} isOpen={isOpen} size="xs">
       <DrawerOverlay>
-        <DrawerContent>
+        <DrawerContent bg="black" color="neonBlue">
           <IconButton
             aria-label="close menu"
             icon={<CloseIcon />}
-            bg="none"
+            bg="neonBlue"
+            border="none"
             pos="absolute"
             right={4}
             top={4}
             onClick={onMenuClose}
             _hover={{
-              border: "none",
               textDecoration: "none",
-              boxShadow: "none",
+              bg: "black",
+              color: "neonBlue",
+              boxShadow: "2px 2px 2px #83EEFF",
               tranform: "scale(1.1)",
             }}
             _focus={{
@@ -83,7 +85,7 @@ export const StyledDrawer: React.FC<DrawerProps> = ({ onClose, isOpen, onMenuClo
             flexDir="column"
             justifyContent="space-evenly"
             h="100%"
-            color="black"
+            color="neonBlue"
             fontFamily="Tradesmith, sans-serif"
             fontSize="2rem"
             textAlign="center"

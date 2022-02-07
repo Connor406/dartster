@@ -63,7 +63,7 @@ const NavBar: React.FC = () => {
             _hover={{
               textDecoration: "none",
               transform: "scale(1.1)",
-              color: "gold",
+              color: "neonPink",
             }}
             _focus={{
               boxShadow: "none",
