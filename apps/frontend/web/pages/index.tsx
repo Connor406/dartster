@@ -1,33 +1,23 @@
-import { motion } from "framer-motion"
-import { Box, Flex, Text } from "@chakra-ui/react"
-import { UseResponsiveCheck } from "@/hooks"
 import Logo from "@/components/Motion/Logo/Logo"
+import Image from "next/image"
+import { motion } from "framer-motion"
+import { Box, Text } from "@chakra-ui/react"
 
-const MotionBox = motion(Box)
 const MotionText = motion(Text)
 
-const colors = {
-  green: "rgba(77, 119, 78, 1)",
-  darkGreen: "rgba(22, 74, 65, 1)",
-  lightGreen: "rgba(157, 200, 141, 1)",
-  yellow: "rgba(241, 178, 74, 1)",
-  black: "rgba(18, 21, 31, 1)",
-  white: "rgba(255, 255, 255, 1)",
-}
-
 export function Index() {
-  const { isMobile, isTablet } = UseResponsiveCheck()
-
   return (
-    <MotionBox
-      p="4rem 2rem"
-      w="100vw"
-      h="100vh"
-      bgImage="url('/neon2.svg')"
-      bgPosition="cover"
-      bgRepeat="no-repeat"
-      textAlign="center"
-    >
+    <Box h="100vh" w="100vw">
+      <Box pos="fixed" h="100vh" w="100vw" overflow="hidden" zIndex="-1">
+        <Image
+          src="/neon2.svg"
+          height="100vh"
+          width="100vw"
+          layout="fill"
+          objectFit="cover"
+          alt="bg"
+        />
+      </Box>
       <Logo />
       <MotionText
         initial={{ opacity: 0, scale: 3 }}
@@ -39,7 +29,7 @@ export function Index() {
       >
         A work in progress...
       </MotionText>
-    </MotionBox>
+    </Box>
   )
 }
 
