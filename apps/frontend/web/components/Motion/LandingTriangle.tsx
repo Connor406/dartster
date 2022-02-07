@@ -61,7 +61,7 @@ function randTransition() {
 
 export function LandingTriangle() {
   return (
-    <Box pos="fixed" h="100vh" w="100vw" overflow="hidden" zIndex="-1" bg="black">
+    <Box pos="fixed" h="100vh" w="100%" overflow="hidden" zIndex="-1" bg="black">
       <svg
         width="inherit"
         height="inherit"
