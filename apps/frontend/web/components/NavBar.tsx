@@ -53,7 +53,7 @@ const NavBar: React.FC = () => {
             fontSize="1.8rem"
             aria-label="menu"
             icon={<HamburgerIcon />}
-            color={page === "/" ? "white" : "gold"}
+            color="neonBlue"
             bg="none"
             border="none"
             pos="fixed"
@@ -76,9 +76,6 @@ const NavBar: React.FC = () => {
             onClose={() => setMobileNavOpen(false)}
             isOpen={mobileNavOpen}
           />
-          {/* <AnimatePresence>
-                {isLoading && <Loader isMobile={isMobile} key="key" />}
-              </AnimatePresence> */}
         </>
       ) : (
         <DesktopNav />

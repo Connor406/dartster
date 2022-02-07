@@ -12,12 +12,13 @@ const breakpoints = createBreakpoints({
 
 const theme = extendTheme({
   colors: {
-    green: "#4D774E",
-    darkGreen: "#164A41",
-    lightGreen: "#9DC88D",
-    gold: "#f8dfb7",
-    yellow: "#F1B24A",
+    neonPink: "#ff37d4",
+    pink: "#ff37d497",
+    neonBlue: "#83EEFF",
+    blue: "#83eeffb5",
+    lightOff: "#29484d",
     black: "#12151f",
+    blackOpac: "#12151fc3",
     white: "#ffffff",
   },
   fonts,
@@ -54,8 +55,8 @@ const theme = extendTheme({
         mr: "1rem",
         borderTop: "5px solid transparent",
         _hover: {
-          color: "yellow",
-          borderTop: "5px solid #F1B24A",
+          color: "neonBlue",
+          borderTop: "5px solid #83EEFF",
           borderBottom: "none",
           textDecoration: "none",
         },

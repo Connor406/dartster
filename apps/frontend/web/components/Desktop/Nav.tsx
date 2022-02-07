@@ -41,7 +41,7 @@ const DesktopNav: React.FC = () => {
   return (
     <Box
       h="4rem"
-      bgGradient={page === "/" ? "inherit" : `linear-gradient(140deg, green, lightGreen )`}
+      bg={page === "/" ? "inherit" : "black"}
       pos="fixed"
       display="flex"
       w="100vw"
@@ -56,7 +56,7 @@ const DesktopNav: React.FC = () => {
         flexDir="row"
         w="60vw"
         justifyContent="flex-start"
-        color="white"
+        color="neonBlue"
       >
         <Link mx="1rem" href="/">
           Home
@@ -79,7 +79,7 @@ const DesktopNav: React.FC = () => {
         flexDir="row"
         w="60vw"
         h="100%"
-        color="white"
+        color="neonBlue"
       >
         {me.username ? (
           <Box h="100%" display="flex" alignItems="flex-start">

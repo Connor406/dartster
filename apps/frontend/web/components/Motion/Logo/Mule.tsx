@@ -1,3 +1,4 @@
+import { UseResponsiveCheck } from "@/hooks"
 import { Box } from "@chakra-ui/react"
 import { motion } from "framer-motion"
 
@@ -28,17 +29,13 @@ const transition = {
 }
 
 export function Mule() {
+  const { isMobile } = UseResponsiveCheck()
   return (
     <Box
       filter={`-webkit-filter: drop-shadow( 8px 8px 10px ${neonPink});
           filter: drop-shadow( 8px 8px 10px ${neonPink});`}
     >
-      <svg
-        width="179.943"
-        height="110.866"
-        viewBox="0 0 179.943 110.866"
-        xmlns="http://www.w3.org/2000/svg"
-      >
+      <svg width="179.943" height="110.866" xmlns="http://www.w3.org/2000/svg">
         <g
           id="svgGroup"
           strokeLinecap="round"

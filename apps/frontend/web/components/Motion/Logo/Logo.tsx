@@ -6,14 +6,13 @@ import { Mule } from "./Mule"
 interface Props {}
 
 function Logo({}: Props) {
-  const { isMobile, isTablet } = UseResponsiveCheck()
+  const { isMobile } = UseResponsiveCheck()
 
   return (
     <Flex
-      w="100%"
-      h="100%"
+      w={isMobile ? "10rem" : "23rem"}
+      h="8rem"
       justifyContent="center"
-      alignItems="center"
       flexDir={isMobile ? "column" : "row"}
     >
       <Dart />
