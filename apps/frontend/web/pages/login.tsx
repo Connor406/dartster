@@ -1,16 +1,16 @@
 import Wrapper from "@/components/Wrapper"
-import { Button, Flex, FormControl, Input, Text } from "@chakra-ui/react"
+import { Box, Button, Flex, FormControl, Input, Text } from "@chakra-ui/react"
 import { axios, API_URL } from "@/services"
 import { useForm, SubmitHandler } from "react-hook-form"
 import { useRouter } from "next/router"
 import { motion } from "framer-motion"
+import Welcome from "@/components/Text/Welcome"
+import Back from "@/components/Text/Back"
 
 interface Form {
   username: string
   password: string
 }
-
-const MotionText = motion(Text)
 
 export default function Login() {
   const {
@@ -28,30 +28,11 @@ export default function Login() {
 
   // TODO: add 'forgot password' and 'change password' buttons
 
-  const lightOff = "#29484d"
-  const pink = "#ff37d497"
   return (
     <Wrapper bgColor="black" size="small">
       <Flex justifyContent="center">
-        <Text fontSize="3rem" fontFamily="Sanpaullo" color="neonBlue">
-          Welcome
-        </Text>
-        <MotionText
-          fontSize="3rem"
-          fontFamily="Sanpaullo"
-          color="pink"
-          animate={{
-            color: [lightOff, pink, lightOff, pink, lightOff, pink, lightOff, pink],
-          }}
-          transition={{
-            duration: 0.5,
-            times: [0.05, 0.1, 0.2, 0.25, 0.32, 0.38, 0.4, 0.45, 0.5],
-            repeat: Infinity,
-            repeatDelay: 3,
-          }}
-        >
-          Back
-        </MotionText>
+        <Welcome />
+        <Back />
       </Flex>
       <FormControl as="form" onSubmit={handleSubmit(onSubmit)}>
         <Input

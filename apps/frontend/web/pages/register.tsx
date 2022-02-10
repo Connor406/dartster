@@ -3,8 +3,10 @@ import { useState } from "react"
 import { AxiosResponse } from "axios"
 import { axios, API_URL } from "@/services"
 import { useRouter } from "next/router"
-import { Box, Button, FormControl, FormHelperText, Input, Text } from "@chakra-ui/react"
+import { Box, Button, Flex, FormControl, FormHelperText, Input, Text } from "@chakra-ui/react"
 import Wrapper from "@/components/Wrapper"
+import Create from "@/components/Text/Create"
+import Account from "@/components/Text/Account"
 
 interface IFormInput {
   email: string
@@ -41,10 +43,11 @@ export default function Register() {
   console.log(message)
 
   return (
-    <Wrapper size="small">
-      <Text fontSize="3rem" fontFamily="Lansdowne Slanted" color="gold">
-        Create an account
-      </Text>
+    <Wrapper size="small" bgColor="black">
+      <Flex justifyContent="center">
+        <Create />
+        <Account />
+      </Flex>
       <FormControl as="form" onSubmit={handleSubmit(onSubmit)} h="80vh">
         <Box display="flex" width="100%" margin="0px" padding="0px" my="1rem">
           <Input
@@ -54,6 +57,19 @@ export default function Register() {
             {...register("firstName", {
               required: true,
             })}
+            borderColor="neonBlue"
+            bg="black"
+            color="white"
+            _hover={{
+              borderColor: "pink",
+            }}
+            _focus={{
+              borderColor: "neonPink",
+            }}
+            _autofill={{
+              textFillColor: "#83EEFF",
+              boxShadow: "0 0 0px 100px #12151f inset",
+            }}
           />
           <Input
             $name={errors["lastName"]}
@@ -61,6 +77,19 @@ export default function Register() {
             {...register("lastName", {
               required: true,
             })}
+            borderColor="neonBlue"
+            bg="black"
+            color="white"
+            _hover={{
+              borderColor: "pink",
+            }}
+            _focus={{
+              borderColor: "neonPink",
+            }}
+            _autofill={{
+              textFillColor: "#83EEFF",
+              boxShadow: "0 0 0px 100px #12151f inset",
+            }}
           />
         </Box>
         <Input
@@ -70,6 +99,19 @@ export default function Register() {
           {...register("username", {
             required: true,
           })}
+          borderColor="neonBlue"
+          bg="black"
+          color="white"
+          _hover={{
+            borderColor: "pink",
+          }}
+          _focus={{
+            borderColor: "neonPink",
+          }}
+          _autofill={{
+            textFillColor: "#83EEFF",
+            boxShadow: "0 0 0px 100px #12151f inset",
+          }}
         />
         <Input
           mb="1rem"
@@ -80,6 +122,19 @@ export default function Register() {
             validate: (val: string) => val.includes("@") || "Please enter valid email",
             required: true,
           })}
+          borderColor="neonBlue"
+          bg="black"
+          color="white"
+          _hover={{
+            borderColor: "pink",
+          }}
+          _focus={{
+            borderColor: "neonPink",
+          }}
+          _autofill={{
+            textFillColor: "#83EEFF",
+            boxShadow: "0 0 0px 100px #12151f inset",
+          }}
         />
         <Input
           mb="1rem"
@@ -90,8 +145,31 @@ export default function Register() {
             validate: (val: string) => val.length >= 8 || "Password must be at least 8 characters",
             required: true,
           })}
+          borderColor="neonBlue"
+          bg="black"
+          color="white"
+          _hover={{
+            borderColor: "pink",
+          }}
+          _focus={{
+            borderColor: "neonPink",
+          }}
+          _autofill={{
+            textFillColor: "#83EEFF",
+            boxShadow: "0 0 0px 100px #12151f inset",
+          }}
         />
-        <Button type="submit" onClick={handleSubmit(onSubmit)}>
+        <Button
+          type="submit"
+          onClick={handleSubmit(onSubmit)}
+          bg="black"
+          border="1px solid #ff37d497"
+          color="pink"
+          _hover={{
+            border: "1px solid #ff37d4",
+            color: "neonPink",
+          }}
+        >
           Sign Up
         </Button>
         {userError && <FormHelperText color="red">{userError}</FormHelperText>}
