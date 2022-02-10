@@ -24,31 +24,29 @@ const theme = extendTheme({
   fonts,
   breakpoints,
   components: {
-    Button: {
-      baseStyle: {
-        fontFamily: "sans-serif",
-        color: "black",
-        bg: "gold",
-        border: "5px solid white",
-        boxShadow: "md",
-        _hover: {
-          boxShadow: "xs",
-          transform: "scale(0.98)",
-        },
-        _focus: {
-          boxShadow: "none",
-        },
-      },
-      sizes: {
-        xl: {
-          h: 14,
-          minW: 14,
-          fontSize: "2xl",
-          px: 8,
-        },
-      },
-      variants: {},
-    },
+    // Button: {
+    //   baseStyle: {
+    //     fontFamily: "sans-serif",
+    //     color: "black",
+    //     boxShadow: "md",
+    //     _hover: {
+    //       boxShadow: "xs",
+    //       transform: "scale(0.98)",
+    //     },
+    //     _focus: {
+    //       boxShadow: "none",
+    //     },
+    //   },
+    //   sizes: {
+    //     xl: {
+    //       h: 14,
+    //       minW: 14,
+    //       fontSize: "2xl",
+    //       px: 8,
+    //     },
+    //   },
+    //   variants: {},
+    // },
     Link: {
       baseStyle: {
         pt: "1rem",
@@ -81,6 +79,14 @@ const theme = extendTheme({
     Input: {
       baseStyle: {
         mb: "1rem",
+        border: "2px solid pink",
+        borderColor: "neonBlue",
+        _hover: {
+          borderColor: "pink",
+        },
+        _focus: {
+          borderColor: "neonPink",
+        },
       },
       sizes: {},
       variants: {},

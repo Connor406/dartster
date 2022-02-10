@@ -2,7 +2,7 @@ import { Box } from "@chakra-ui/react"
 import { easeInOut } from "@popmotion/popcorn"
 import { motion } from "framer-motion"
 
-// Colors from theme
+// Colors from theme => cannot access theme from framer props j
 const pink = "#ff37d497"
 const blue = "#83eeffb5"
 

@@ -33,6 +33,7 @@ export default function Wrapper({
         textAlign="center"
         p="4rem 2rem"
         px={size === "small" && !isMobile ? "30%" : "10%"}
+        minH="100vh"
       >
         {children}
       </Box>
