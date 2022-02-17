@@ -9,10 +9,7 @@ const traffic: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
       reply
     ) {
       const { location } = request.query
-
-      const ipHeader = request.headers["x-forwarded-for"]
-      const ips = Array.isArray(ipHeader) ? ipHeader : [ipHeader]
-      const ip = ips[0]
+      const { ip } = request
 
       await fastify.prisma.traffic.upsert({
         where: { ip },
@@ -22,7 +19,7 @@ const traffic: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
           vists: { increment: 1 },
         },
         create: {
-          ip: request.headers["x-forwarded-for"],
+          ip,
           user_agent: request.headers["user-agent"],
           connorcodes: location === "connorcodes",
           dartmule: location === "dartmule",
