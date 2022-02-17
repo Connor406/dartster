@@ -56,8 +56,7 @@ model session {
 }
 
 model traffic {
-  id          String   @id @default(uuid()) @db.Uuid
-  ip          String
+  ip          String   @id
   user_agent  String?
   connorcodes Boolean  @default(false)
   dartmule    Boolean  @default(false)
