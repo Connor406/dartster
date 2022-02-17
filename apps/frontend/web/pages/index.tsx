@@ -1,28 +1,25 @@
 import Logo from "@/components/Motion/Logo/Logo"
 import { motion } from "framer-motion"
-import { Box, Flex, Text } from "@chakra-ui/react"
+import { Box, Flex } from "@chakra-ui/react"
 import { LandingTriangle } from "@/components/Motion/LandingTriangle"
+import Introduction from "@/components/Introduction"
+import { useEffect } from "react"
+import { API_URL, axios } from "@/services"
 
-const MotionText = motion(Text)
+const MotionBox = motion(Box)
 
 export function Index() {
+  useEffect(() => {
+    axios.get(`${API_URL}/traffic?location=dartmule`)
+  }, [])
+
   return (
     <Box minH="100vh" minW="100vw" textAlign="center" overflow="clip">
       <LandingTriangle />
       <Flex h="50vh" w="100vw" justifyContent="center" alignItems="flex-end" textAlign="center">
         <Logo />
       </Flex>
-      <MotionText
-        initial={{ opacity: 0, scale: 3 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.5, delay: 0.5, type: "spring" }}
-        color="neonBlue"
-        fontFamily="sans-serif"
-        textShadow="8px 8px 10px #164A41"
-        mt="3rem"
-      >
-        A work in progress...
-      </MotionText>
+      <Introduction />
     </Box>
   )
 }

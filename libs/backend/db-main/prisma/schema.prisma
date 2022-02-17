@@ -54,3 +54,14 @@ model session {
   createdAt    DateTime
   updatedAt    DateTime @updatedAt
 }
+
+model traffic {
+  id          String   @id @default(uuid()) @db.Uuid
+  ip          String
+  user_agent  String?
+  connorcodes Boolean  @default(false)
+  dartmule    Boolean  @default(false)
+  vists       Int      @default(1)
+  first_visit DateTime
+  last_visit  DateTime @updatedAt
+}

@@ -7,6 +7,7 @@ const start = async () => {
     logger: true,
     ignoreTrailingSlash: true,
     pluginTimeout: 0, // https://github.com/fastify/help/issues/188
+    trustProxy: true,
   })
   try {
     await fastify.listen(port, "0.0.0.0")
