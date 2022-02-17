@@ -5,9 +5,12 @@ import { axios, API_URL } from "@/services"
 import { useState, useEffect } from "react"
 import { userAtom } from "@/store"
 import { SubmitHandler, useForm } from "react-hook-form"
-import { Box, Button, FormControl, Input, Text, Select } from "@chakra-ui/react"
+import { Box, Button, FormControl, Input, Text, Select, Flex } from "@chakra-ui/react"
 import { useRouter } from "next/router"
 import { useAtomValue } from "jotai/utils"
+import New from "@/components/Text/New"
+import Game from "@/components/Text/Game"
+import { UseResponsiveCheck } from "@/hooks"
 
 export default function NewGame() {
   // me query return value
@@ -25,6 +28,7 @@ export default function NewGame() {
   }
 
   const router = useRouter()
+  const { isMobile } = UseResponsiveCheck()
 
   async function searchUsers(value) {
     if (value && value.length > 2) {
@@ -78,10 +82,11 @@ export default function NewGame() {
   }
 
   return (
-    <Wrapper size="small">
-      <Text fontSize="3rem" fontFamily="Lansdowne Slanted" color="gold">
-        New game
-      </Text>
+    <Wrapper size="small" bgColor="black">
+      <Flex justifyContent="center" flexDir={isMobile ? "column" : "row"} alignItems="center">
+        <New />
+        <Game />
+      </Flex>
       <PlayerCards players={players} me={me.username} deselect={deselectUser} />
       <FormControl as="form" onSubmit={handleSubmit(onSubmit)}>
         <Input
@@ -91,18 +96,33 @@ export default function NewGame() {
             setValue(e.target.value)
           }}
           value={value}
+          borderColor="neonBlue"
+          bg="black"
+          color="white"
+          _hover={{
+            borderColor: "pink",
+          }}
+          _focus={{
+            borderColor: "neonPink",
+          }}
+          _autofill={{
+            textFillColor: "#83EEFF",
+            boxShadow: "0 0 0px 100px #12151f inset",
+          }}
         />
         <Box display="flex" w="100%" justifyContent="center" h="3.5rem">
           {result.map((user, i) => {
             return (
               user.username && (
                 <Button
-                  bg="white"
-                  color="gold"
+                  bg="black"
+                  color="blue"
+                  _hover={{
+                    color: "neonBlue",
+                  }}
                   mx=".5rem"
                   key={i}
                   onClick={() => selectUser(user)}
-                  _hover={{ color: "green" }}
                 >
                   {user.username}
                 </Button>
@@ -111,14 +131,44 @@ export default function NewGame() {
           })}
         </Box>
         <Box display="flex" flexWrap="wrap" w="100%" minW="300px" justifyContent="space-evenly">
-          <Select as="select" w="30%" placeholder="Score" {...register("startingScore")}>
+          <Select
+            as="select"
+            w="30%"
+            placeholder="Score"
+            {...register("startingScore", { required: true })}
+            borderColor="neonBlue"
+            bg="black"
+            color="white"
+            _hover={{
+              borderColor: "pink",
+            }}
+            _focus={{
+              borderColor: "neonPink",
+            }}
+            _autofill={{
+              textFillColor: "#83EEFF",
+              boxShadow: "0 0 0px 100px #12151f inset",
+            }}
+          >
             <option value="101">101</option>
             <option value="201">201</option>
             <option value="301">301</option>
             <option value="401">401</option>
             <option value="501">501</option>
           </Select>
-          <Button type="submit">Start</Button>
+          <Button
+            type="submit"
+            onClick={handleSubmit(onSubmit)}
+            bg="black"
+            border="1px solid #ff37d497"
+            color="pink"
+            _hover={{
+              border: "1px solid #ff37d4",
+              color: "neonPink",
+            }}
+          >
+            Start
+          </Button>
         </Box>
       </FormControl>
     </Wrapper>

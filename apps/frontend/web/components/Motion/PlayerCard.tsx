@@ -2,6 +2,7 @@ import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import styled from "styled-components"
 import { GiCutDiamond, GiImperialCrown } from "react-icons/gi"
+import { Box, calc, Flex } from "@chakra-ui/react"
 
 interface Props {
   players?: { id: string; username: string }[]
@@ -14,13 +15,45 @@ export default function PlayerCards({ players, me, deselect }: Props) {
     <Wrap>
       {players.map((player, index) => {
         const isMe = me === player.username
+        const shadowColor = isMe ? "white" : "#83EEFF"
         return (
-          <div key={index} onClick={() => deselect(player.id)}>
-            <Card isMe={isMe}>
+          <Flex
+            color={isMe ? "white" : "neonBlue"}
+            key={index}
+            onClick={() => {
+              !isMe && deselect(player.id)
+            }}
+            justifyContent="center"
+            w="100%"
+            my="1rem"
+            h="8rem"
+          >
+            <Flex
+              flexDir="column"
+              filter={`-webkit-filter: drop-shadow( 8px 8px 10px ${shadowColor});
+               filter: drop-shadow( 8px 8px 10px ${shadowColor});`}
+              justifyContent="center"
+              alignItems="center"
+              h="6rem"
+              w="6rem"
+              flexWrap="wrap"
+              border={`4px solid ${shadowColor}`}
+              borderRadius="50%"
+              transform="transition: 1s"
+              _hover={
+                !isMe && {
+                  color: "#83eeffb5",
+                  filter: `-webkit-filter: drop-shadow( 8px 8px 10px #83eeffb5);
+                    filter: drop-shadow( 8px 8px 10px #83eeffb5);`,
+                  border: "4px solid #83eeffb5",
+                  cursor: "pointer",
+                }
+              }
+            >
               <Text>{player.username}</Text>
               {isMe ? <Crown /> : <Diamond />}
-            </Card>
-          </div>
+            </Flex>
+          </Flex>
         )
       })}
     </Wrap>
