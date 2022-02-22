@@ -1,9 +1,8 @@
-import Wrapper from "@/components/Wrapper"
-import { Box, Button, Flex, FormControl, Input, Text } from "@chakra-ui/react"
+import { Button, Flex, FormControl, Input } from "@chakra-ui/react"
 import { axios, API_URL } from "@/services"
 import { useForm, SubmitHandler } from "react-hook-form"
 import { useRouter } from "next/router"
-import { motion } from "framer-motion"
+import Wrapper from "@/components/Wrapper"
 import Welcome from "@/components/Text/Welcome"
 import Back from "@/components/Text/Back"
 

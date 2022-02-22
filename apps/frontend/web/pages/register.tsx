@@ -3,7 +3,7 @@ import { useState } from "react"
 import { AxiosResponse } from "axios"
 import { axios, API_URL } from "@/services"
 import { useRouter } from "next/router"
-import { Box, Button, Flex, FormControl, FormHelperText, Input, Text } from "@chakra-ui/react"
+import { Box, Button, Flex, FormControl, FormHelperText, Input } from "@chakra-ui/react"
 import Wrapper from "@/components/Wrapper"
 import Create from "@/components/Text/Create"
 import Account from "@/components/Text/Account"
@@ -40,7 +40,6 @@ export default function Register() {
   }
 
   const message = Object.values(errors)
-  console.log(message)
 
   return (
     <Wrapper size="small" bgColor="black">
