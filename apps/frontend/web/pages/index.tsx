@@ -19,7 +19,7 @@ export function Index() {
       <Flex h="50vh" w="100vw" justifyContent="center" alignItems="flex-end" textAlign="center">
         <Logo />
       </Flex>
-      <Introduction />
+      {/* <Introduction /> */}
     </Box>
   )
 }
