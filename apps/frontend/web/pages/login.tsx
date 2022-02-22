@@ -36,7 +36,7 @@ export default function Login() {
       </Flex>
       <FormControl as="form" onSubmit={handleSubmit(onSubmit)}>
         <Input
-          mb="1rem"
+          my="1rem"
           borderColor="neonBlue"
           $name={errors["username"]}
           bg="black"
