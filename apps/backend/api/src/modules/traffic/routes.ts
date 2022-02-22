@@ -14,8 +14,8 @@ const traffic: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
       await fastify.prisma.traffic.upsert({
         where: { ip },
         update: {
-          connorcodes: location === "connorcodes" ?? undefined,
-          dartmule: location === "dartmule" ?? undefined,
+          ...(location === "connorcodes" && { connorcodes: true }),
+          ...(location === "dartmule" && { dartmule: true }),
           vists: { increment: 1 },
         },
         create: {
